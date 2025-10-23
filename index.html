@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Countdown to Someone’s First Fantasy Championship</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="assets/favicon.ico">
+  <meta name="description" content="Pick a name and start the jinx.">
+  <meta property="og:title" content="Countdown to a First Fantasy Championship">
+  <meta property="og:description" content="Pick a name and start the jinx.">
+  <meta property="og:image" content="assets/og-image.png">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <button id="menuBtn" class="menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="menuDrawer">☰ Menu</button>
+    <h1 id="pageTitle">Countdowns</h1>
+  </header>
+
+  <aside id="menuDrawer" class="drawer" aria-hidden="true">
+    <nav aria-label="People">
+      <h2>Pick a victim</h2>
+      <ul id="peopleList"></ul>
+    </nav>
+  </aside>
+  <div class="backdrop" id="backdrop" hidden></div>
+
+  <div class="hero">
+    <img id="headerImg" alt="" />
+  </div>
+
+  <main id="main" class="container">
+    <h2 id="personHeading"></h2>
+
+    <div id="timer" class="timer" role="timer" aria-live="polite" aria-atomic="true">
+      <div class="segment"><span id="d">0</span><small>Days</small></div>
+      <div class="segment"><span id="h">0</span><small>Hours</small></div>
+      <div class="segment"><span id="m">0</span><small>Minutes</small></div>
+      <div class="segment"><span id="s">0</span><small>Seconds</small></div>
+    </div>
+
+    <p id="quip" class="quip"></p>
+    <p class="details">Season ends <time id="deadlineText"></time> (Central Time).</p>
+    <noscript><p><strong>This page needs JavaScript</strong> to update the countdown.</p></noscript>
+  </main>
+
+  <footer class="site-footer">
+    <p>Made with petty sports superstition.</p>
+  </footer>
+
+  <script src="people.js"></script>
+  <script src="script.js" defer></script>
+</body>
+</html>
