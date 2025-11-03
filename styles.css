@@ -35,6 +35,9 @@
   object-fit: cover;
   display: block;
 }
+/* Safety: if hidden attribute present, always hide (some UA quirks) */
+#yearPicker[hidden] { display: none !important; }
+
 
 /* Year picker (Dom only) */
 .year-picker {
