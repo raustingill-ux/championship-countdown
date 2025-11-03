@@ -150,3 +150,38 @@ body{
 @media (max-width: 400px) {
   .hero-grid { gap: 2px; }
 }
+/* === Fix GG overlapping the right-side league title on mobile === */
+
+/* Make the header a 3-column grid so edges stay in their lanes */
+.site-header{
+  display: grid;
+  grid-template-columns: auto 1fr auto;  /* [Menu] [center area] [Title] */
+  align-items: center;
+}
+
+/* Tighten the <h1 id="pageTitle"> and keep it from sprawling */
+#pageTitle{
+  margin: 0;
+  line-height: 1.1;
+}
+
+/* Phone tweaks: reduce GG a bit and shrink the title so they never collide */
+@media (max-width: 480px){
+  #ggBanner{
+    font-size: clamp(56px, 20vw, 108px);   /* slightly smaller GG on narrow screens */
+  }
+  #pageTitle{
+    font-size: clamp(14px, 4.6vw, 20px);    /* smaller, cleaner title on phones */
+    white-space: nowrap;                    /* keep it on one line */
+  }
+}
+
+/* Optional: nudge the title to the bottom-right of the header on extra-tight screens */
+@media (max-width: 360px){
+  #pageTitle{
+    position: absolute;
+    right: 1rem;
+    bottom: 6px;
+    z-index: 2;
+  }
+}
