@@ -9,7 +9,7 @@ const PEOPLE = [
 
 const QUIPS = [
   "It's finally his year!",
-  "Experts predict: It's already over",
+  "Experts predict: It's Joever",
   "GG",
   "He's the GOAT"
 ];
