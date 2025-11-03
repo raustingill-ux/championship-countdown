@@ -1,5 +1,5 @@
 // Central Time winter offset is -06:00. Adjust end-of-season here once per year.
-const GLOBAL_SEASON_END_ISO = "2025-12-29T23:59:59-06:00";
+const GLOBAL_SEASON_END_ISO = "2025-12-29T22:00:00-06:00";
 
 const PEOPLE = [
   { slug: "matt",  name: "Matt",  header: "assets/headers/matt.png",  targetIso: null },
