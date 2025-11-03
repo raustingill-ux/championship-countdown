@@ -40,10 +40,10 @@ const PEOPLE = [
     // Optional custom title (omit to use the generic one)
     // title: "Countdown to Matt’s Whatever",
     headerImages: [
-      "assets/headers/matt-1.png",
-      "assets/headers/matt-2.png",
-      "assets/headers/matt-3.png",
-      "assets/headers/matt-4.png",
+      "assets/headers/matt-1.jpg",
+      "assets/headers/matt-2.jpg",
+      "assets/headers/matt-3.jpg",
+      "assets/headers/matt-4.jpg",
     ],
     targetIso: GLOBAL_SEASON_END_ISO, // Dec 29, 2025 @ 10:00 PM CT
   },
@@ -52,10 +52,10 @@ const PEOPLE = [
     name: "Cam",
     title: "Countdown to Cam’s Perfect Season",   // new title
     headerImages: [
-      "assets/headers/cam-1.png",
-      "assets/headers/cam-2.png",
-      "assets/headers/cam-3.png",
-      "assets/headers/cam-4.png",
+      "assets/headers/cam-1.jpg",
+      "assets/headers/cam-2.jpg",
+      "assets/headers/cam-3.jpg",
+      "assets/headers/cam-4.jpg",
     ],
     // December 8, 2025 at 10:00 PM Central (CST is UTC-06:00)
     targetIso: "2025-12-08T22:00:00-06:00",      // new target
@@ -65,10 +65,10 @@ const PEOPLE = [
     name: "Dom",
     title: "Countdown to the Start of Dom’s Dynasty",  // new title
     headerImages: [
-      "assets/headers/dom-1.png",
-      "assets/headers/dom-2.png",
-      "assets/headers/dom-3.png",
-      "assets/headers/dom-4.png",
+      "assets/headers/dom-1.jpg",
+      "assets/headers/dom-2.jpg",
+      "assets/headers/dom-3.jpg",
+      "assets/headers/dom-4.jpg",
     ],
     multiYear: true,
     years: DOM_YEARS,  // 2025–2035
