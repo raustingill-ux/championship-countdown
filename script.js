@@ -1,7 +1,6 @@
 (function () {
   // ---------- Utilities ----------
   const qs = (sel, el = document) => el.querySelector(sel);
-  const qsa = (sel, el = document) => Array.from(el.querySelectorAll(sel));
 
   function getPersonFromURL() {
     const url = new URL(window.location.href);
@@ -25,9 +24,12 @@
   }
 
   function setTitleAndLeague(person) {
-    document.title = `Countdown to ${person.name}’s First Fantasy Championship`;
-    qs("#personHeading").textContent =
-      `Countdown to ${person.name}’s First Fantasy Championship`;
+    const pageTitleText = person.title
+      ? person.title
+      : `Countdown to ${person.name}’s First Fantasy Championship`;
+    document.title = pageTitleText;
+    qs("#personHeading").textContent = pageTitleText;
+
     // League label at top-right:
     qs("#pageTitle").textContent = person.multiYear ? "FCL" : "Beast League";
   }
@@ -109,7 +111,7 @@
     clearTicker();
     const target = new Date(targetIso);
     deadlineText.textContent = fmtCT(targetIso);
-    timerEl.style.display = ""; // make sure visible when we start
+    timerEl.style.display = ""; // ensure visible
 
     function renderCountdown() {
       const now = new Date();
@@ -150,12 +152,11 @@
     : "";
 
   if (person.multiYear) {
-    // DOM (multi-year): show picker and DEFAULT to 2025 immediately
+    // Dom (multi-year): show picker and DEFAULT to 2025 immediately
     yearPicker.hidden = false;
-    yearPicker.style.display = ""; // show when Dom
+    yearPicker.style.display = ""; // show for Dom
 
-
-    // build options 2025..2035
+    // Fill options 2025..2035
     yearSelect.innerHTML = "";
     (person.years || []).forEach((yr) => {
       const opt = document.createElement("option");
@@ -164,24 +165,26 @@
       yearSelect.appendChild(opt);
     });
 
-    // When user changes, start that year's countdown
+    // Start selected year's countdown
     yearSelect.addEventListener("change", () => {
       const yr = Number(yearSelect.value);
       const iso = (typeof domIsoForYear === "function") ? domIsoForYear(yr) : "";
       if (iso) startCountdown(iso);
     });
 
-    // Default to 2025 so the countdown shows immediately
+    // Default to 2025
     const defaultYear = 2025;
     if ((person.years || []).includes(defaultYear)) {
       yearSelect.value = String(defaultYear);
       yearSelect.dispatchEvent(new Event("change"));
     }
   } else {
-    // Matt & Cam: NO year selector at all, hide it explicitly
+    // Matt & Cam: hide the year selector completely and run their timer
     if (yearPicker) {
-    yearPicker.hidden = true;
-    yearPicker.style.display = "none";
+      yearPicker.hidden = true;
+      yearPicker.style.display = "none";
+    }
+    const targetIso = person.targetIso || GLOBAL_SEASON_END_ISO;
     startCountdown(targetIso);
   }
 })();
