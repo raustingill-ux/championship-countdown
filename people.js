@@ -33,29 +33,28 @@ const PEOPLE = [
   {
     slug: "cam",
     name: "Cam",
-    title: "Countdown to Cam’s Perfect Season",
+    title: "Countdown to Cam’s Perfect Season",   // new title
     headerImages: [
       "assets/headers/cam-1.png",
       "assets/headers/cam-2.png",
       "assets/headers/cam-3.png",
       "assets/headers/cam-4.png",
     ],
-    // December 8, 2025 @ 10:00 PM Central (CST = UTC-06:00)
-    targetIso: "2025-12-08T22:00:00-06:00",
+    // December 8, 2025 at 10:00 PM Central (CST is UTC-06:00)
+    targetIso: "2025-12-08T22:00:00-06:00",      // new target
   },
   {
     slug: "dom",
     name: "Dom",
-    title: "Countdown to the Start of Dom’s Dynasty",
+    title: "Countdown to the Start of Dom’s Dynasty",  // new title
     headerImages: [
       "assets/headers/dom-1.png",
       "assets/headers/dom-2.png",
       "assets/headers/dom-3.png",
       "assets/headers/dom-4.png",
     ],
-    multiYear: true,   // special behavior: shows year dropdown
-    years: DOM_YEARS,  // 2025–2035
-    // target per year is computed with domIsoForYear(year)
+    multiYear: true,
+    years: DOM_YEARS,  // Dom keeps the 2025–2035 selector; dates still from domIsoForYear()
   },
 ];
 
