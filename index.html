@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Countdown to Someone’s First Fantasy Championship</title>
+  <title>Countdown to a First Fantasy Championship</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="assets/favicon.ico">
   <meta name="description" content="Pick a name and start the jinx.">
@@ -20,6 +20,7 @@
     <h1 id="pageTitle">Countdowns</h1>
   </header>
 
+  <!-- Drawer menu -->
   <aside id="menuDrawer" class="drawer" aria-hidden="true">
     <nav aria-label="People">
       <h2>Pick a victim</h2>
@@ -28,13 +29,26 @@
   </aside>
   <div class="backdrop" id="backdrop" hidden></div>
 
+  <!-- Header image area: 4 slots -->
   <div class="hero">
-    <img id="headerImg" alt="" />
+    <div class="hero-grid">
+      <img id="headerImg1" alt="" />
+      <img id="headerImg2" alt="" />
+      <img id="headerImg3" alt="" />
+      <img id="headerImg4" alt="" />
+    </div>
   </div>
 
   <main id="main" class="container">
     <h2 id="personHeading"></h2>
 
+    <!-- Dom-only: year picker -->
+    <div id="yearPicker" class="year-picker" hidden>
+      <label for="yearSelect"><strong>Select Year:</strong></label>
+      <select id="yearSelect" aria-label="Select countdown year"></select>
+    </div>
+
+    <!-- Timer -->
     <div id="timer" class="timer" role="timer" aria-live="polite" aria-atomic="true">
       <div class="segment"><span id="d">0</span><small>Days</small></div>
       <div class="segment"><span id="h">0</span><small>Hours</small></div>
@@ -44,11 +58,12 @@
 
     <p id="quip" class="quip"></p>
     <p class="details">Season ends <time id="deadlineText"></time> (Central Time).</p>
+
     <noscript><p><strong>This page needs JavaScript</strong> to update the countdown.</p></noscript>
   </main>
 
   <footer class="site-footer">
-    <p>Will he repeat next year?</p>
+    <p>GG, congrats on a great season. Can't wait to see what you do next year!</p>
   </footer>
 
   <script src="people.js"></script>
