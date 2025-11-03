@@ -118,4 +118,38 @@
 @media (max-width: 420px) {
   #ggBanner { font-size: clamp(60px, 24vw, 120px); }
 }
+/* --- iPhone Safari/mobile fixes --- */
+
+/* 1) Show 2 images side-by-side on phones; drop to 1 only on very tiny screens */
+@media (max-width: 520px) {
+  .hero-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 360px) {
+  .hero-grid { grid-template-columns: 1fr !important; }
+}
+
+/* 2) Keep the timer on one line by letting tiles shrink on small screens */
+@media (max-width: 520px) {
+  .timer {
+    display: grid;                            /* switch from flex to grid */
+    grid-template-columns: repeat(4, 1fr);    /* 4 equal columns */
+    gap: 6px;
+  }
+  .segment {
+    min-width: auto;                          /* allow shrink */
+    padding: .55rem .45rem;
+  }
+  .segment span {
+    font-size: clamp(1.25rem, 6vw, 2rem);     /* smaller max on phones */
+  }
+  .segment small {
+    font-size: .72rem;
+    letter-spacing: .02em;
+  }
+}
+
+/* Optional: if an ultra-narrow device still feels tight, go 2x2 at <=360px */
+@media (max-width: 360px) {
+  .timer { grid-template-columns: repeat(2, 1fr); }
+}
 
