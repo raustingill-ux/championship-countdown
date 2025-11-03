@@ -51,3 +51,8 @@
   border-radius: 8px;
   padding: .35rem .6rem;
 }
+/* Footer centered horizontally */
+.site-footer {
+  justify-content: center !important;
+  text-align: center;
+}
