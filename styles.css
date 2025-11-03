@@ -63,3 +63,30 @@
 #personHeading { 
   text-align: center; 
 }
+/* --- Switch header images to 1:1 squares --- */
+.hero { max-height: none !important; }           /* cancel old 42vh cap */
+.hero img { height: auto !important; }           /* cancel earlier height:100% */
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));  /* 4 squares across on desktop */
+  gap: 4px;
+  width: 100%;
+  border-bottom: 1px solid #1f2733;
+  background: #0f141c;
+}
+
+.hero-grid img {
+  width: 100%;
+  aspect-ratio: 1 / 1;      /* <- makes each tile a square */
+  object-fit: cover;        /* fill the square (crops edges if not already square) */
+  display: block;
+}
+
+/* Responsive: fewer columns on small screens */
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .hero-grid { grid-template-columns: 1fr; }
+}
