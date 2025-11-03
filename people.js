@@ -4,12 +4,12 @@ const GLOBAL_SEASON_END_ISO = "2025-12-29T22:00:00-06:00";
 const PEOPLE = [
   { slug: "matt",  name: "Matt",  header: "assets/headers/matt.png",  targetIso: null },
   { slug: "cam", name: "Cam", header: "assets/headers/cam.png", targetIso: null },
-  { slug: "dom", name: "Dom", header: "assets/headers/dom.png", targetIso: "2025-12-22T23:59:59-06:00" }
+  { slug: "dom", name: "Dom", header: "assets/headers/dom.png", targetIso: "2025-12-29T22:00:00-06:00" }
 ];
 
 const QUIPS = [
-  "Tick… tick… no rings yet.",
-  "Experts predict: not this year.",
-  "Confidence level: extremely jinxed.",
-  "Championship drought continues."
+  "It's finally his year!",
+  "Experts predict: It's already over",
+  "GG",
+  "He's the GOAT"
 ];
