@@ -15,43 +15,43 @@ body{
 .skip{position:absolute;left:-9999px;top:-9999px}
 .skip:focus{left:1rem;top:1rem;background:#000;color:#fff;padding:.5rem 1rem;z-index:9999}
 
-/* Header (3-column grid) and footer */
+/* ===== HEADER (3-column grid) ===== */
 .site-header{
-  /* grid keeps Menu (L), GG (center), Title (R) in their lanes */
-  display:grid;
+  display:grid;                               /* Menu | GG | Title */
   grid-template-columns:auto 1fr auto;
   align-items:center;
   position:relative;
-  min-height:clamp(64px,18vw,180px); /* room for giant GG */
+  min-height:clamp(64px,18vw,180px);          /* room for giant GG */
   padding:.8rem 1rem;
   max-width:1000px;
   margin:0 auto;
 }
-.site-footer{
-  display:flex;align-items:center;justify-content:center;
-  padding:.8rem 1rem;max-width:1000px;margin:0 auto;
-  color:var(--muted);font-size:.9rem;text-align:center
-}
 
-/* Menu button */
+/* Left: Menu button */
 .menu-btn{
   font:inherit;color:var(--ink);background:transparent;
   border:1px solid #2b3442;border-radius:8px;padding:.35rem .7rem;cursor:pointer;
-  position:relative;z-index:2; /* stay above GG edges */
+  position:relative;z-index:2;                /* stay above GG edges */
+  justify-self:start;                         /* snap to left of col 1 */
 }
 
-/* Right-side league title */
-#pageTitle{margin:0;line-height:1.1;position:relative;z-index:2}
-
-/* Centered, HUGE red GG that is a real link */
+/* Center: HUGE red GG link (absolute so it is truly centered) */
 #ggBanner{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  z-index:1;display:inline-block;text-decoration:none;font-weight:900;
+  z-index:1;
+  display:inline-block;text-decoration:none;font-weight:900;
   font-size:clamp(80px,16vw,160px);
   letter-spacing:.02em;color:#ff0000;text-shadow:0 2px 4px rgba(0,0,0,.45);
-  line-height:1
+  line-height:1;
 }
-#ggBanner:hover{text-decoration:underline}
+#ggBanner:hover{ text-decoration:underline; }
+
+/* Right: league title */
+#pageTitle{
+  margin:0;line-height:1.1;position:relative;z-index:2;
+  justify-self:end;                           /* snap to right of col 3 */
+  text-align:right;
+}
 
 /* Phone tweaks so GG and title never collide */
 @media (max-width:480px){
@@ -62,11 +62,18 @@ body{
   #pageTitle{position:absolute;right:1rem;bottom:6px;z-index:2}
 }
 
-/* Side drawer */
+/* ===== FOOTER ===== */
+.site-footer{
+  display:flex;align-items:center;justify-content:center;
+  padding:.8rem 1rem;max-width:1000px;margin:0 auto;
+  color:var(--muted);font-size:.9rem;text-align:center;
+}
+
+/* ===== SIDE DRAWER ===== */
 .drawer{
   position:fixed;inset:0 auto 0 0;width:290px;max-width:80vw;background:#121821;
   border-right:1px solid #263041;transform:translateX(-100%);transition:transform .2s ease-out;
-  z-index:1000;padding:1rem
+  z-index:1000;padding:1rem;
 }
 .drawer[aria-hidden="false"]{transform:translateX(0)}
 .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:900}
@@ -76,53 +83,53 @@ body{
 .drawer a{display:block;padding:.5rem .6rem;border-radius:6px;text-decoration:none;color:var(--ink)}
 .drawer a[aria-current="page"],.drawer a:hover{background:#1b2432}
 
-/* Hero area */
+/* ===== HERO (4 square images across) ===== */
 .hero{width:100%;border-bottom:1px solid #1f2733;background:#0f141c;padding:0}
 .hero-grid{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr)) !important; /* force 4 on all widths */
-  gap:4px;width:100%;background:#0f141c
+  grid-template-columns:repeat(4,minmax(0,1fr)); /* force 4 on all widths */
+  gap:4px;width:100%;background:#0f141c;
 }
-@media (max-width:400px){ .hero-grid{gap:2px} }
+@media (max-width:400px){ .hero-grid{ gap:2px; } }
 .hero-grid img{
   width:100%;
-  aspect-ratio:1/1;     /* square tiles */
-  object-fit:cover;     /* crop edges if not square */
-  display:block
+  aspect-ratio:1/1;     /* perfect square tiles */
+  object-fit:cover;     /* crop edges if the source isn’t square */
+  display:block;
 }
 
-/* Main container */
+/* ===== MAIN ===== */
 .container{max-width:1000px;margin:1.25rem auto 2rem;padding:0 1rem}
 
-/* Heading */
+/* Page heading */
 #personHeading{
-  text-align:center;font-size:clamp(1.5rem,2.5vw + 1rem,2.6rem);margin:.2rem 0 1rem
+  text-align:center;font-size:clamp(1.5rem,2.5vw + 1rem,2.6rem);margin:.2rem 0 1rem;
 }
 
 /* Timer – mobile-first grid */
 .timer{
   display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
-  align-items:stretch;justify-items:stretch;margin:1rem 0 .6rem
+  align-items:stretch;justify-items:stretch;margin:1rem 0 .6rem;
 }
 .segment{
   min-width:0;text-align:center;background:#101623;border:1px solid #1e2736;border-radius:12px;
-  padding:.75rem .6rem
+  padding:.75rem .6rem;
 }
 .segment span{display:block;font-weight:700;font-size:clamp(1.25rem,6vw,2.6rem)}
 .segment small{display:block;color:var(--muted);letter-spacing:.05em;font-size:clamp(.72rem,2.6vw,.9rem)}
-@media (max-width:360px){ .timer{grid-template-columns:repeat(2,1fr)} } /* 2x2 on ultra-narrow */
+@media (max-width:360px){ .timer{grid-template-columns:repeat(2,1fr)} } /* 2×2 on ultra-narrow */
 
 /* Quip + details */
 .quip{text-align:center;color:var(--accent);margin:.2rem 0 1rem;min-height:1.2em}
 .details{color:var(--muted);text-align:center}
 
 /* Year picker (Dom only) */
-#yearPicker[hidden]{display:none !important} /* safety for UA quirks */
+#yearPicker[hidden]{display:none !important} /* UA quirks safety */
 .year-picker{
-  display:flex;align-items:center;gap:.6rem;justify-content:center;margin:.5rem 0 1rem
+  display:flex;align-items:center;gap:.6rem;justify-content:center;margin:.5rem 0 1rem;
 }
 .year-picker select{
-  background:#101623;color:var(--ink);border:1px solid #1e2736;border-radius:8px;padding:.35rem .6rem
+  background:#101623;color:var(--ink);border:1px solid #1e2736;border-radius:8px;padding:.35rem .6rem;
 }
 
 /* Small touch tweaks */
