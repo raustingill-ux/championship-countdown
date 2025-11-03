@@ -37,8 +37,6 @@ const PEOPLE = [
   {
     slug: "matt",
     name: "Matt",
-    // Optional custom title (omit to use the generic one)
-    // title: "Countdown to Matt’s Whatever",
     headerImages: [
       "assets/headers/matt-1.jpg",
       "assets/headers/matt-2.jpg",
@@ -46,11 +44,12 @@ const PEOPLE = [
       "assets/headers/matt-4.jpg",
     ],
     targetIso: GLOBAL_SEASON_END_ISO, // Dec 29, 2025 @ 10:00 PM CT
+    quips: ["It's finally his year!"], // Matt only
   },
   {
     slug: "cam",
     name: "Cam",
-    title: "Countdown to Cam’s Perfect Season",   // new title
+    title: "Countdown to Cam’s Perfect Season",
     headerImages: [
       "assets/headers/cam-1.jpg",
       "assets/headers/cam-2.jpg",
@@ -58,12 +57,13 @@ const PEOPLE = [
       "assets/headers/cam-4.jpg",
     ],
     // December 8, 2025 at 10:00 PM Central (CST is UTC-06:00)
-    targetIso: "2025-12-08T22:00:00-06:00",      // new target
+    targetIso: "2025-12-08T22:00:00-06:00",
+    quips: ["Experts predict: It's Joever"], // Cam only
   },
   {
     slug: "dom",
     name: "Dom",
-    title: "Countdown to the Start of Dom’s Dynasty",  // new title
+    title: "Countdown to the Start of Dom’s Dynasty",
     headerImages: [
       "assets/headers/dom-1.jpg",
       "assets/headers/dom-2.jpg",
@@ -71,12 +71,13 @@ const PEOPLE = [
       "assets/headers/dom-4.jpg",
     ],
     multiYear: true,
-    years: DOM_YEARS,  // 2025–2035
-    // targetIso for Dom is computed at runtime from domIsoForYear(year)
+    years: DOM_YEARS, // 2025–2035
+    quips: ["Sources say he may never lose another game."], // Dom custom
+    // target per year computed at runtime from domIsoForYear(year)
   },
 ];
 
-// ===== Quips =====
+// ===== Quips (global fallback, not used for the three above) =====
 const QUIPS = [
   "It's finally his year!",
   "Experts predict: It's Joever",
