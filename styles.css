@@ -3,7 +3,7 @@
 /* Base & typography */
 *{box-sizing:border-box}
 html,body{height:100%}
-html{ -webkit-text-size-adjust:100%; }               /* iPhone Safari text zoom fix */
+html{-webkit-text-size-adjust:100%} /* iPhone Safari text zoom fix */
 body{
   margin:0;
   font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
@@ -15,17 +15,51 @@ body{
 .skip{position:absolute;left:-9999px;top:-9999px}
 .skip:focus{left:1rem;top:1rem;background:#000;color:#fff;padding:.5rem 1rem;z-index:9999}
 
-/* Header / Footer shells */
-.site-header,.site-footer{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:.8rem 1rem;max-width:1000px;margin:0 auto
+/* Header (3-column grid) and footer */
+.site-header{
+  /* grid keeps Menu (L), GG (center), Title (R) in their lanes */
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  position:relative;
+  min-height:clamp(64px,18vw,180px); /* room for giant GG */
+  padding:.8rem 1rem;
+  max-width:1000px;
+  margin:0 auto;
 }
-.site-footer{color:var(--muted);font-size:.9rem}
+.site-footer{
+  display:flex;align-items:center;justify-content:center;
+  padding:.8rem 1rem;max-width:1000px;margin:0 auto;
+  color:var(--muted);font-size:.9rem;text-align:center
+}
 
 /* Menu button */
 .menu-btn{
   font:inherit;color:var(--ink);background:transparent;
-  border:1px solid #2b3442;border-radius:8px;padding:.4rem .7rem;cursor:pointer
+  border:1px solid #2b3442;border-radius:8px;padding:.35rem .7rem;cursor:pointer;
+  position:relative;z-index:2; /* stay above GG edges */
+}
+
+/* Right-side league title */
+#pageTitle{margin:0;line-height:1.1;position:relative;z-index:2}
+
+/* Centered, HUGE red GG that is a real link */
+#ggBanner{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  z-index:1;display:inline-block;text-decoration:none;font-weight:900;
+  font-size:clamp(80px,16vw,160px);
+  letter-spacing:.02em;color:#ff0000;text-shadow:0 2px 4px rgba(0,0,0,.45);
+  line-height:1
+}
+#ggBanner:hover{text-decoration:underline}
+
+/* Phone tweaks so GG and title never collide */
+@media (max-width:480px){
+  #ggBanner{font-size:clamp(56px,20vw,108px)}
+  #pageTitle{font-size:clamp(14px,4.6vw,20px);white-space:nowrap}
+}
+@media (max-width:360px){
+  #pageTitle{position:absolute;right:1rem;bottom:6px;z-index:2}
 }
 
 /* Side drawer */
@@ -43,20 +77,17 @@ body{
 .drawer a[aria-current="page"],.drawer a:hover{background:#1b2432}
 
 /* Hero area */
-.hero{width:100%;border-bottom:1px solid #1f2733;background:#0f141c}
-.hero { padding: 0; }
+.hero{width:100%;border-bottom:1px solid #1f2733;background:#0f141c;padding:0}
 .hero-grid{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr)); /* phones default to two tiles */
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important; /* force 4 on all widths */
   gap:4px;width:100%;background:#0f141c
 }
-@media (min-width:640px){ .hero-grid{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
-@media (min-width:900px){ .hero-grid{ grid-template-columns:repeat(4,minmax(0,1fr)); } }
-
+@media (max-width:400px){ .hero-grid{gap:2px} }
 .hero-grid img{
   width:100%;
-  aspect-ratio:1 / 1;         /* square tiles */
-  object-fit:cover;           /* crop edges if not square */
+  aspect-ratio:1/1;     /* square tiles */
+  object-fit:cover;     /* crop edges if not square */
   display:block
 }
 
@@ -65,41 +96,28 @@ body{
 
 /* Heading */
 #personHeading{
-  text-align:center;
-  font-size:clamp(1.5rem,2.5vw + 1rem,2.6rem);
-  margin:.2rem 0 1rem
+  text-align:center;font-size:clamp(1.5rem,2.5vw + 1rem,2.6rem);margin:.2rem 0 1rem
 }
 
 /* Timer – mobile-first grid */
 .timer{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
-  align-items:stretch;justify-items:stretch;
-  margin:1rem 0 .6rem
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+  align-items:stretch;justify-items:stretch;margin:1rem 0 .6rem
 }
 .segment{
-  min-width:0;                              /* allow shrink on small screens */
-  text-align:center;background:#101623;border:1px solid #1e2736;border-radius:12px;
+  min-width:0;text-align:center;background:#101623;border:1px solid #1e2736;border-radius:12px;
   padding:.75rem .6rem
 }
-.segment span{
-  display:block;font-weight:700;
-  font-size:clamp(1.25rem,6vw,2.6rem)
-}
-.segment small{
-  display:block;color:var(--muted);letter-spacing:.05em;
-  font-size:clamp(.72rem,2.6vw,.9rem)
-}
-/* Ultra-narrow phones: 2x2 so nothing overflows */
-@media (max-width:360px){ .timer{ grid-template-columns:repeat(2,1fr); } }
+.segment span{display:block;font-weight:700;font-size:clamp(1.25rem,6vw,2.6rem)}
+.segment small{display:block;color:var(--muted);letter-spacing:.05em;font-size:clamp(.72rem,2.6vw,.9rem)}
+@media (max-width:360px){ .timer{grid-template-columns:repeat(2,1fr)} } /* 2x2 on ultra-narrow */
 
 /* Quip + details */
 .quip{text-align:center;color:var(--accent);margin:.2rem 0 1rem;min-height:1.2em}
 .details{color:var(--muted);text-align:center}
 
 /* Year picker (Dom only) */
-#yearPicker[hidden]{ display:none !important; }  /* safety for UA quirks */
+#yearPicker[hidden]{display:none !important} /* safety for UA quirks */
 .year-picker{
   display:flex;align-items:center;gap:.6rem;justify-content:center;margin:.5rem 0 1rem
 }
@@ -107,81 +125,8 @@ body{
   background:#101623;color:var(--ink);border:1px solid #1e2736;border-radius:8px;padding:.35rem .6rem
 }
 
-/* Footer centered horizontally */
-.site-footer{justify-content:center !important;text-align:center}
-
-/* === GG YouTube Link (centered + huge) === */
-.site-header{
-  position:relative;
-  min-height:clamp(64px,18vw,180px); /* enough room for giant GG */
-}
-
-/* Centered, HUGE red GG that is a real link */
-#ggBanner{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  z-index:1;
-  display:inline-block;text-decoration:none;font-weight:900;
-  font-size:clamp(80px,16vw,160px);
-  letter-spacing:.02em;color:#ff0000;text-shadow:0 2px 4px rgba(0,0,0,.45);
-  line-height:1
-}
-
-/* Keep Menu (left) and League label (right) above the big link if edges overlap */
-.menu-btn,#pageTitle{ position:relative; z-index:2; }
-
-/* Optional hover on desktop */
-#ggBanner:hover{ text-decoration:underline; }
-
-/* Slightly smaller GG on very narrow screens */
-@media (max-width:420px){ #ggBanner{ font-size:clamp(60px,24vw,120px); } }
-
 /* Small touch tweaks */
 @media (max-width:520px){
-  .menu-btn{ padding:.35rem .6rem; }
-  .container{ padding:0 .75rem; }
-}
-/* --- Force 4 header images on all devices --- */
-.hero-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 4px;
-}
-
-/* Make the tiles a bit tighter on very small phones so all 4 feel usable */
-@media (max-width: 400px) {
-  .hero-grid { gap: 2px; }
-}
-/* === Fix GG overlapping the right-side league title on mobile === */
-
-/* Make the header a 3-column grid so edges stay in their lanes */
-.site-header{
-  display: grid;
-  grid-template-columns: auto 1fr auto;  /* [Menu] [center area] [Title] */
-  align-items: center;
-}
-
-/* Tighten the <h1 id="pageTitle"> and keep it from sprawling */
-#pageTitle{
-  margin: 0;
-  line-height: 1.1;
-}
-
-/* Phone tweaks: reduce GG a bit and shrink the title so they never collide */
-@media (max-width: 480px){
-  #ggBanner{
-    font-size: clamp(56px, 20vw, 108px);   /* slightly smaller GG on narrow screens */
-  }
-  #pageTitle{
-    font-size: clamp(14px, 4.6vw, 20px);    /* smaller, cleaner title on phones */
-    white-space: nowrap;                    /* keep it on one line */
-  }
-}
-
-/* Optional: nudge the title to the bottom-right of the header on extra-tight screens */
-@media (max-width: 360px){
-  #pageTitle{
-    position: absolute;
-    right: 1rem;
-    bottom: 6px;
-    z-index: 2;
-  }
+  .menu-btn{padding:.35rem .6rem}
+  .container{padding:0 .75rem}
 }
