@@ -11,7 +11,6 @@
   }
 
   function fmtCT(iso) {
-    // Present a date/time in America/Chicago for readability
     const d = new Date(iso);
     const opts = {
       timeZone: "America/Chicago",
@@ -25,10 +24,12 @@
     return new Intl.DateTimeFormat(undefined, opts).format(d);
   }
 
-  function setTitle(person) {
+  function setTitleAndLeague(person) {
     document.title = `Countdown to ${person.name}’s First Fantasy Championship`;
     qs("#personHeading").textContent =
       `Countdown to ${person.name}’s First Fantasy Championship`;
+    // League label at top-right:
+    qs("#pageTitle").textContent = person.multiYear ? "FCL" : "Beast League";
   }
 
   function setHeaderImages(person) {
@@ -89,23 +90,14 @@
     if (e.key === "Escape" && drawer.getAttribute("aria-hidden") === "false") closeDrawer();
   });
 
-  // ---------- Render ----------
-  const person = getPersonFromURL();
-  setTitle(person);
-  setHeaderImages(person);
-  buildMenu(person);
-
+  // ---------- Countdown helpers ----------
   const timerEl = qs("#timer");
   const dEl = qs("#d"), hEl = qs("#h"), mEl = qs("#m"), sEl = qs("#s");
   const deadlineText = qs("#deadlineText");
   const quipEl = qs("#quip");
+  const yearPicker = qs("#yearPicker");
+  const yearSelect = qs("#yearSelect");
 
-  // Quip
-  quipEl.textContent = (Array.isArray(QUIPS) && QUIPS.length)
-    ? QUIPS[Math.floor(Math.random() * QUIPS.length)]
-    : "";
-
-  // DOM helpers for countdown
   let tickHandle = null;
   function clearTicker() {
     if (tickHandle) {
@@ -117,6 +109,7 @@
     clearTicker();
     const target = new Date(targetIso);
     deadlineText.textContent = fmtCT(targetIso);
+    timerEl.style.display = ""; // make sure visible when we start
 
     function renderCountdown() {
       const now = new Date();
@@ -126,6 +119,7 @@
       const hours = Math.floor((totalSeconds % 86400) / 3600);
       const minutes = Math.floor((totalSeconds % 3600) / 60);
       const seconds = totalSeconds % 60;
+
       dEl.textContent = days;
       hEl.textContent = String(hours).padStart(2, "0");
       mEl.textContent = String(minutes).padStart(2, "0");
@@ -144,41 +138,46 @@
     renderCountdown();
   }
 
-  // Person-specific behavior
-  if (person.multiYear) {
-    // Dom: show year picker; hide timer until a year is chosen
-    const pickerWrap = qs("#yearPicker");
-    const select = qs("#yearSelect");
+  // ---------- Render ----------
+  const person = getPersonFromURL();
+  setTitleAndLeague(person);
+  setHeaderImages(person);
+  buildMenu(person);
 
-    // Fill years (2025..2035)
-    select.innerHTML = "";
+  // Quip text
+  quipEl.textContent = (Array.isArray(QUIPS) && QUIPS.length)
+    ? QUIPS[Math.floor(Math.random() * QUIPS.length)]
+    : "";
+
+  if (person.multiYear) {
+    // DOM (multi-year): show picker and DEFAULT to 2025 immediately
+    yearPicker.hidden = false;
+
+    // build options 2025..2035
+    yearSelect.innerHTML = "";
     (person.years || []).forEach((yr) => {
       const opt = document.createElement("option");
       opt.value = String(yr);
       opt.textContent = String(yr);
-      select.appendChild(opt);
+      yearSelect.appendChild(opt);
     });
 
-    pickerWrap.hidden = false;
-    // Hide timer and deadline text until selection
-    timerEl.style.display = "none";
-    deadlineText.textContent = "— pick a year above —";
-
-    select.addEventListener("change", () => {
-      const yr = Number(select.value);
+    // When user changes, start that year's countdown
+    yearSelect.addEventListener("change", () => {
+      const yr = Number(yearSelect.value);
       const iso = (typeof domIsoForYear === "function") ? domIsoForYear(yr) : "";
-      if (iso) {
-        // Show timer and start ticking
-        timerEl.style.display = "";
-        startCountdown(iso);
-      }
+      if (iso) startCountdown(iso);
     });
 
-    // Optional: pre-select the first year but do NOT auto-start the timer
-    // (per requirement: no countdown on main screen). Leave it blank until user chooses.
-
+    // Default to 2025 so the countdown shows immediately
+    const defaultYear = 2025;
+    if ((person.years || []).includes(defaultYear)) {
+      yearSelect.value = String(defaultYear);
+      yearSelect.dispatchEvent(new Event("change"));
+    }
   } else {
-    // Regular person (Matt, Cam): run single countdown using targetIso or global default
+    // Matt & Cam: NO year selector at all, hide it explicitly
+    if (yearPicker) yearPicker.hidden = true;
     const targetIso = person.targetIso || GLOBAL_SEASON_END_ISO;
     startCountdown(targetIso);
   }
