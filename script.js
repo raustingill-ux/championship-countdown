@@ -152,6 +152,8 @@
   if (person.multiYear) {
     // DOM (multi-year): show picker and DEFAULT to 2025 immediately
     yearPicker.hidden = false;
+    yearPicker.style.display = ""; // show when Dom
+
 
     // build options 2025..2035
     yearSelect.innerHTML = "";
@@ -177,8 +179,9 @@
     }
   } else {
     // Matt & Cam: NO year selector at all, hide it explicitly
-    if (yearPicker) yearPicker.hidden = true;
-    const targetIso = person.targetIso || GLOBAL_SEASON_END_ISO;
+    if (yearPicker) {
+    yearPicker.hidden = true;
+    yearPicker.style.display = "none";
     startCountdown(targetIso);
   }
 })();
