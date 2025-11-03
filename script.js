@@ -146,10 +146,9 @@
   setHeaderImages(person);
   buildMenu(person);
 
-  // Quip text
-  quipEl.textContent = (Array.isArray(QUIPS) && QUIPS.length)
-    ? QUIPS[Math.floor(Math.random() * QUIPS.length)]
-    : "";
+  // Quip text (per-person override, fallback to global QUIPS)
+  const pool = (person.quips && person.quips.length) ? person.quips : (QUIPS || []);
+  quipEl.textContent = pool.length ? pool[Math.floor(Math.random() * pool.length)] : "";
 
   if (person.multiYear) {
     // Dom (multi-year): show picker and DEFAULT to 2025 immediately
