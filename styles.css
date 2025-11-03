@@ -59,3 +59,7 @@
   justify-content: center !important;
   text-align: center;
 }
+/* Center the page heading on all pages */
+#personHeading { 
+  text-align: center; 
+}
