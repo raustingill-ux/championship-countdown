@@ -140,3 +140,13 @@ body{
   .menu-btn{ padding:.35rem .6rem; }
   .container{ padding:0 .75rem; }
 }
+/* --- Force 4 header images on all devices --- */
+.hero-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 4px;
+}
+
+/* Make the tiles a bit tighter on very small phones so all 4 feel usable */
+@media (max-width: 400px) {
+  .hero-grid { gap: 2px; }
+}
