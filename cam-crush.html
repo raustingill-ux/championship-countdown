@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Cam Crush – Championship Countdown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="assets/favicon.ico">
+  <meta name="description" content="Cam stops for nobody. Steamroll the league and rack up points.">
+  <meta property="og:title" content="Cam Crush – Championship Countdown">
+  <meta property="og:description" content="A fast, silly fantasy-football jinx runner.">
+  <meta property="og:image" content="assets/og-image.png">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <button id="menuBtn" class="menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="menuDrawer">☰ Menu</button>
+    <a id="ggBanner" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1"
+       target="_blank" rel="noopener noreferrer" aria-label="Open GG video on YouTube">GG</a>
+    <h1 id="pageTitle">Arcade</h1>
+  </header>
+
+  <!-- Drawer -->
+  <aside id="menuDrawer" class="drawer" aria-hidden="true">
+    <nav aria-label="Navigate">
+      <h2>Pick a page</h2>
+      <ul id="peopleList"></ul>
+    </nav>
+  </aside>
+  <div class="backdrop" id="backdrop" hidden></div>
+
+  <main id="main" class="container">
+    <!-- HOME PANEL -->
+    <section id="homePanel" aria-labelledby="homeTitle">
+      <h2 id="homeTitle" class="game-title">Cam Crush</h2>
+      <p class="game-sub">Maps are years. Levels are fantasy weeks (1–17). There is no losing — only setbacks or surges.</p>
+
+      <div class="home-grid">
+        <div class="home-card">
+          <h3>Start</h3>
+          <label for="yearSelectHome"><strong>Season:</strong></label>
+          <select id="yearSelectHome" class="game-select" aria-label="Pick season year"></select>
+          <button id="startBtn" class="btn primary">Start Season</button>
+          <p class="tiny-muted">Default first map: 2025.</p>
+        </div>
+
+        <div class="home-card">
+          <h3>How to Play</h3>
+          <ul class="bullets">
+            <li><kbd>→</kbd> Roll forward</li>
+            <li><kbd>↑</kbd> / <kbd>W</kbd> / <kbd>Space</kbd> Jump</li>
+            <li><kbd>←</kbd> shows: “Cam stops for nobody. All we know is victory.”</li>
+            <li><kbd>P</kbd> Pause → Resume or Quit (no saving)</li>
+          </ul>
+          <p class="tiny-muted">Crush opponents (cones, signs, papers) for points. Hazards only slow you.</p>
+        </div>
+
+        <div class="home-card">
+          <h3>Top 5 – All Time</h3>
+          <ol id="homeBoard" class="board"></ol>
+          <button id="resetBoardBtn" class="btn danger small">Reset Local Leaderboard</button>
+          <p class="tiny-muted">Stored in your browser (localStorage).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RUN PANEL -->
+    <section id="runPanel" hidden aria-label="Game area">
+      <div class="game-wrap">
+        <canvas id="crush" width="960" height="540" aria-label="Cam Crush game canvas"></canvas>
+
+        <!-- HUD -->
+        <div class="hud">
+          <div class="hud-left">
+            <span id="hudYear">2025</span> • <span id="hudWeek">Week 1</span>
+          </div>
+          <div class="hud-center">
+            <button id="pauseBtn" class="btn">Pause</button>
+          </div>
+          <div class="hud-right">
+            Score: <span id="score">0</span> &nbsp;|&nbsp; Best: <span id="best">0</span>
+          </div>
+        </div>
+
+        <!-- Controls overlay / on-screen jump for mobile -->
+        <button id="jumpBtn" class="jump-btn" aria-label="Jump">Jump</button>
+
+        <!-- In-run Top 5 -->
+        <div id="liveBoard" class="live-board" aria-live="polite"></div>
+
+        <!-- Toast for quips -->
+        <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      </div>
+
+      <div class="legend">
+        <span class="pill setback">BenJarvus Setback</span>
+        <span class="pill surge">Odell Surge</span>
+        <span class="pill finals">Finals Bonus (Weeks 16–17)</span>
+      </div>
+    </section>
+
+    <!-- PAUSE MODAL -->
+    <dialog id="pauseModal" class="modal">
+      <h3>Paused</h3>
+      <button id="resumeBtn" class="btn">Resume</button>
+      <button id="quitBtn" class="btn danger">Quit to Home</button>
+    </dialog>
+
+    <!-- NAME ENTRY MODAL -->
+    <dialog id="nameModal" class="modal">
+      <h3>Top 5! Enter your name</h3>
+      <form id="nameForm" method="dialog">
+        <input id="nameInput" class="name-input" maxlength="20" placeholder="Your name (max 20)" required />
+        <div class="row">
+          <button class="btn primary" id="saveNameBtn">Save</button>
+          <button class="btn" id="skipNameBtn">Skip</button>
+        </div>
+        <p id="nameError" class="error" role="alert" hidden></p>
+      </form>
+    </dialog>
+
+    <!-- GRAVEYARD PANEL -->
+    <section id="graveyardPanel" hidden aria-label="Opponent Graveyard">
+      <div class="graveyard-wrap">
+        <canvas id="grave" width="960" height="360" aria-label="Opponent Graveyard"></canvas>
+        <div class="grave-copy">
+          <h3>Season Complete – Dynasty +1</h3>
+          <p class="tiny-muted">Drive past the fallen. GG.</p>
+          <button id="continueBtn" class="btn primary">Continue to Next Year</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>GG, congrats on a great run.</p>
+  </footer>
+
+  <!-- Minimal drawer for this page -->
+  <script>
+    const qs = (s, el=document)=>el.querySelector(s);
+    const menuBtn = qs("#menuBtn");
+    const drawer = qs("#menuDrawer");
+    const backdrop = qs("#backdrop");
+    function openDrawer(){drawer.setAttribute("aria-hidden","false");menuBtn.setAttribute("aria-expanded","true");backdrop.hidden=false;}
+    function closeDrawer(){drawer.setAttribute("aria-hidden","true");menuBtn.setAttribute("aria-expanded","false");backdrop.hidden=true;}
+    menuBtn.addEventListener("click",()=>{drawer.getAttribute("aria-hidden")==="false"?closeDrawer():openDrawer();});
+    backdrop.addEventListener("click", closeDrawer);
+    document.addEventListener("keydown",(e)=>{if(e.key==="Escape"&&drawer.getAttribute("aria-hidden")==="false") closeDrawer();});
+    // Populate menu similar to main site
+    const list = qs("#peopleList");
+    [["Matt","?p=matt"],["Cam","?p=cam"],["Dom","?p=dom"]].forEach(([label,href])=>{
+      const li=document.createElement("li");const a=document.createElement("a");a.href=href;a.textContent=label;li.appendChild(a);list.appendChild(li);
+    });
+    const hr=document.createElement("li");hr.style.margin=".5rem 0";hr.style.borderTop="1px solid #263041";list.appendChild(hr);
+    const game1=document.createElement("li");const a1=document.createElement("a");a1.href="cam-crush.html";a1.textContent="Cam Crush (beta)";game1.appendChild(a1);list.appendChild(game1);
+  </script>
+
+  <script src="cam-crush.js" defer></script>
+</body>
+</html>
