@@ -1,4 +1,7 @@
 (function () {
+  // ---------- Feature flag (1 = show game link, 0 = hide) ----------
+  const SHOW_GAME = 1; // <-- flip this to 0 to hide the game from the menu
+
   // ---------- Utilities ----------
   const qs = (sel, el = document) => el.querySelector(sel);
 
@@ -68,23 +71,24 @@
       ul.appendChild(li);
     }
 
-    // Divider
-    const hr = document.createElement("li");
-    hr.style.margin = ".5rem 0";
-    hr.style.borderTop = "1px solid #263041";
-    ul.appendChild(hr);
+    // Optional: game link (only when SHOW_GAME is truthy)
+    if (SHOW_GAME) {
+      const hr = document.createElement("li");
+      hr.style.margin = ".5rem 0";
+      hr.style.borderTop = "1px solid #263041";
+      ul.appendChild(hr);
 
-    // Game link
-    const gameLi = document.createElement("li");
-    const gameA = document.createElement("a");
-    gameA.href = "cam-crush.html"; // ensure this file exists at site root
-    gameA.textContent = "Cam Crush (beta)";
-    // Highlight as current when you're on the game page
-    if (location.pathname.endsWith("/cam-crush.html") || location.pathname === "/cam-crush.html") {
-      gameA.setAttribute("aria-current", "page");
+      const gameLi = document.createElement("li");
+      const gameA = document.createElement("a");
+      gameA.href = "cam-crush.html"; // ensure this file exists at site root
+      gameA.textContent = "Cam Crush (beta)";
+      // Highlight as current when you're on the game page
+      if (location.pathname.endsWith("/cam-crush.html") || location.pathname === "/cam-crush.html") {
+        gameA.setAttribute("aria-current", "page");
+      }
+      gameLi.appendChild(gameA);
+      ul.appendChild(gameLi);
     }
-    gameLi.appendChild(gameA);
-    ul.appendChild(gameLi);
   }
 
   // Drawer (menu)
