@@ -137,3 +137,85 @@ body{
   .menu-btn{padding:.35rem .6rem}
   .container{padding:0 .75rem}
 }
+/* ======== Cam Crush styles ======== */
+.game-title{ text-align:center; margin:.2rem 0 .25rem; }
+.game-sub{ text-align:center; color:var(--muted); margin:0 0 1rem; }
+.tiny-muted{ color:var(--muted); font-size:.85rem; }
+.mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.error{ color:#ff6b6b; margin-top:.5rem; }
+
+.home-grid{
+  display:grid; grid-template-columns: repeat(3, minmax(0,1fr));
+  gap:12px; margin-bottom:1rem;
+}
+@media (max-width:900px){ .home-grid{ grid-template-columns:1fr; } }
+.home-card{
+  border:1px solid #1e2736; border-radius:12px; padding:12px; background:#0f141c;
+}
+.game-select{ width:100%; background:#101623; color:var(--ink); border:1px solid #1e2736; border-radius:8px; padding:.4rem .6rem; margin:.5rem 0; }
+.bullets{ margin:.25rem 0; padding-left:1.1rem; }
+.board{ margin:.25rem 0; padding-left:1.2rem; }
+.board .mono{ color:#bcd; }
+
+.btn{
+  background:#101623; color:var(--ink); border:1px solid #1e2736; border-radius:8px;
+  padding:.35rem .7rem; cursor:pointer;
+}
+.btn.small{ padding:.25rem .55rem; font-size:.9rem; }
+.btn.primary{ border-color:#294766; background:#152233; }
+.btn.danger{ border-color:#4b2326; background:#251316; }
+
+.game-wrap{
+  position:relative; max-width:1000px; margin:0 auto 1rem;
+  border:1px solid #1e2736; border-radius:12px; overflow:hidden; background:#0f141c;
+}
+#crush{ display:block; width:100%; height:auto; }
+.hud{
+  display:grid; grid-template-columns: 1fr auto 1fr; gap:.5rem; align-items:center;
+  padding:.5rem .75rem; border-top:1px solid #1e2736; color:var(--ink);
+}
+.hud-left{ justify-self:start; }
+.hud-center{ justify-self:center; display:flex; gap:.5rem; }
+.hud-right{ justify-self:end; }
+
+.legend{ display:flex; gap:.5rem; justify-content:center; margin:.25rem 0 1rem; flex-wrap:wrap; }
+.pill{ border:1px solid #1e2736; border-radius:999px; padding:.2rem .55rem; background:#101623; font-size:.85rem; color:#bcd; }
+.pill.setback{ border-color:#663c1f; }
+.pill.surge{ border-color:#3d2f6b; }
+.pill.finals{ border-color:#274f3a; }
+
+.jump-btn{
+  position:absolute; right:.75rem; bottom:.75rem;
+  background:#101623; color:var(--ink); border:1px solid #1e2736;
+  border-radius:999px; padding:.6rem 1rem; cursor:pointer;
+}
+
+.toast{
+  position:absolute; left:50%; top:12px; transform:translateX(-50%);
+  background:#111825; color:var(--ink); border:1px solid #263041;
+  padding:.35rem .6rem; border-radius:8px; opacity:0; pointer-events:none; transition:opacity .18s ease;
+}
+.toast.show{ opacity:1; }
+
+.live-board{
+  position:absolute; right:.5rem; top:.5rem; font-size:.85rem; color:#bcd;
+  background:rgba(16,22,35,.6); border:1px solid #1e2736; border-radius:8px; padding:.25rem .5rem;
+}
+.live-board ol{ margin:.2rem 0 0 .9rem; }
+
+/* Pause + Name modals */
+.modal{
+  border:1px solid #1e2736; border-radius:12px; padding:14px; background:#0f141c; color:var(--ink);
+}
+.modal::backdrop{ background:rgba(0,0,0,.45); }
+.name-input{
+  width:100%; background:#101623; color:var(--ink); border:1px solid #1e2736; border-radius:8px; padding:.4rem .6rem; margin:.5rem 0;
+}
+.row{ display:flex; gap:.5rem; }
+
+/* Graveyard */
+.graveyard-wrap{
+  position:relative; max-width:1000px; margin:0 auto 1rem; border:1px solid #1e2736; border-radius:12px; overflow:hidden; background:#0f141c;
+}
+#grave{ display:block; width:100%; height:auto; }
+.grave-copy{ text-align:center; padding:.5rem; }
