@@ -55,21 +55,43 @@
   function buildMenu(current) {
     const ul = qs("#peopleList");
     ul.innerHTML = "";
+
+    // People links
     for (const p of PEOPLE) {
       const a = document.createElement("a");
       a.href = `?p=${encodeURIComponent(p.slug)}`;
       a.textContent = p.name;
       if (p.slug === current.slug) a.setAttribute("aria-current", "page");
+
       const li = document.createElement("li");
       li.appendChild(a);
       ul.appendChild(li);
     }
+
+    // Divider
+    const hr = document.createElement("li");
+    hr.style.margin = ".5rem 0";
+    hr.style.borderTop = "1px solid #263041";
+    ul.appendChild(hr);
+
+    // Game link
+    const gameLi = document.createElement("li");
+    const gameA = document.createElement("a");
+    gameA.href = "cam-crush.html"; // ensure this file exists at site root
+    gameA.textContent = "Cam Crush (beta)";
+    // Highlight as current when you're on the game page
+    if (location.pathname.endsWith("/cam-crush.html") || location.pathname === "/cam-crush.html") {
+      gameA.setAttribute("aria-current", "page");
+    }
+    gameLi.appendChild(gameA);
+    ul.appendChild(gameLi);
   }
 
   // Drawer (menu)
   const drawer = qs("#menuDrawer");
   const menuBtn = qs("#menuBtn");
   const backdrop = qs("#backdrop");
+
   function openDrawer() {
     drawer.setAttribute("aria-hidden", "false");
     menuBtn.setAttribute("aria-expanded", "true");
@@ -94,7 +116,10 @@
 
   // ---------- Countdown helpers ----------
   const timerEl = qs("#timer");
-  const dEl = qs("#d"), hEl = qs("#h"), mEl = qs("#m"), sEl = qs("#s");
+  const dEl = qs("#d"),
+        hEl = qs("#h"),
+        mEl = qs("#m"),
+        sEl = qs("#s");
   const deadlineText = qs("#deadlineText");
   const quipEl = qs("#quip");
   const yearPicker = qs("#yearPicker");
@@ -155,7 +180,7 @@
     yearPicker.hidden = false;
     yearPicker.style.display = ""; // show for Dom
 
-    // Fill options 2025..2035
+    // Fill options 2025..2035 (or whatever is in person.years)
     yearSelect.innerHTML = "";
     (person.years || []).forEach((yr) => {
       const opt = document.createElement("option");
