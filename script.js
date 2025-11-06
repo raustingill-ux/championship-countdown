@@ -1,6 +1,6 @@
 (function () {
   // ---------- Feature flag (1 = show game link, 0 = hide) ----------
-  const SHOW_GAME = 0; // <-- flip this to 0 to hide the game from the menu
+  const SHOW_GAME = 1; // <-- flip this to 0 to hide the game from the menu
 
   // ---------- Utilities ----------
   const qs = (sel, el = document) => el.querySelector(sel);
