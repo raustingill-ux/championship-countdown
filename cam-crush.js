@@ -3,9 +3,6 @@
 
   // ---------- Helpers ----------
   const qs = (s, el=document)=>el.querySelector(s);
-  const qsa = (s, el=document)=>Array.from(el.querySelectorAll(s));
-
-  function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
   function choice(a){ return a[Math.floor(Math.random()*a.length)]; }
 
   // ---------- DOM ----------
