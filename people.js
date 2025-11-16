@@ -4,10 +4,10 @@
 // (CT in late December is CST = UTC-06:00)
 const GLOBAL_SEASON_END_ISO = "2025-12-29T22:00:00-06:00";
 
-// Years Dom can pick from:
+// Years Dom can pick from (multi-year selector)
 const DOM_YEARS = Array.from({ length: 11 }, (_, i) => 2025 + i);
 
-// Week 17 MNF Mondays for the next 10 years (your plan), all at 10:00 PM Central.
+// Week 17 MNF Mondays for the next 10+ years, all at 10:00 PM Central.
 // Late December is CST (UTC-06:00), so we fix the offset at -06:00.
 const DOM_MNF_BY_YEAR = {
   2025: "2025-12-29",
@@ -37,6 +37,8 @@ const PEOPLE = [
   {
     slug: "matt",
     name: "Matt",
+    // Uses the generic title in script.js:
+    // "Countdown to Matt’s First Fantasy Championship"
     headerImages: [
       "assets/headers/matt-1.jpg",
       "assets/headers/matt-2.jpg",
@@ -44,21 +46,26 @@ const PEOPLE = [
       "assets/headers/matt-4.jpg",
     ],
     targetIso: GLOBAL_SEASON_END_ISO, // Dec 29, 2025 @ 10:00 PM CT
-    quips: ["It's finally his year!"], // Matt only
+    quips: [
+      "It's finally his year!",
+    ],
   },
   {
     slug: "cam",
     name: "Cam",
-    title: "Countdown to Cam’s Perfect Season",
+    // New custom title for Cam
+    title: "Countdown to Cam vs Matt Championship Rematch",
     headerImages: [
       "assets/headers/cam-1.jpg",
       "assets/headers/cam-2.jpg",
       "assets/headers/cam-3.jpg",
       "assets/headers/cam-4.jpg",
     ],
-    // December 8, 2025 at 10:00 PM Central (CST is UTC-06:00)
-    targetIso: "2025-12-08T22:00:00-06:00",
-    quips: ["Experts predict: It's Joever"], // Cam only
+    // Cam now shares the same deadline as Matt
+    targetIso: GLOBAL_SEASON_END_ISO,
+    quips: [
+      "Experts predict: It's Joever",
+    ],
   },
   {
     slug: "dom",
@@ -71,13 +78,15 @@ const PEOPLE = [
       "assets/headers/dom-4.jpg",
     ],
     multiYear: true,
-    years: DOM_YEARS, // 2025–2035
-    quips: ["Sources say he may never lose another game."], // Dom custom
-    // target per year computed at runtime from domIsoForYear(year)
+    years: DOM_YEARS, // 2025–2035, dates computed via domIsoForYear()
+    quips: [
+      "Sources say he may never lose another game.",
+    ],
   },
 ];
 
-// ===== Quips (global fallback, not used for the three above) =====
+// ===== Global quips =====
+// Used as a fallback pool if a person does not define `quips`.
 const QUIPS = [
   "It's finally his year!",
   "Experts predict: It's Joever",
