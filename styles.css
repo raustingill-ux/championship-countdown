@@ -1,9 +1,14 @@
-:root{--bg:#0d0f14;--ink:#f2f5f7;--muted:#aab3bd;--accent:#4da3ff}
+:root{
+  --bg:#0d0f14;
+  --ink:#f2f5f7;
+  --muted:#aab3bd;
+  --accent:#4da3ff;
+}
 
 /* Base & typography */
 *{box-sizing:border-box}
 html,body{height:100%}
-html{ -webkit-text-size-adjust:100%; }               /* iPhone Safari text zoom fix */
+html{ -webkit-text-size-adjust:100%; }  /* iPhone Safari text zoom fix */
 body{
   margin:0;
   font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
@@ -12,11 +17,23 @@ body{
 }
 
 /* Accessibility skip link */
-.skip{position:absolute;left:-9999px;top:-9999px}
-.skip:focus{left:1rem;top:1rem;background:#000;color:#fff;padding:.5rem 1rem;z-index:9999}
+.skip{
+  position:absolute;
+  left:-9999px;
+  top:-9999px;
+}
+.skip:focus{
+  left:1rem;
+  top:1rem;
+  background:#000;
+  color:#fff;
+  padding:.5rem 1rem;
+  z-index:9999;
+}
 
 /* Header / Footer shells */
-.site-header,.site-footer{
+.site-header,
+.site-footer{
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -53,7 +70,7 @@ body{
   z-index:1000;
   padding:1rem;
 }
-.drawer[aria-hidden="false"]{transform:translateX(0)}
+.drawer[aria-hidden="false"]{ transform:translateX(0); }
 .backdrop{
   position:fixed;
   inset:0;
@@ -70,7 +87,7 @@ body{
   padding:0;
   margin:0;
 }
-.drawer li+li{margin-top:.25rem}
+.drawer li+li{ margin-top:.25rem; }
 .drawer a{
   display:block;
   padding:.5rem .6rem;
@@ -92,7 +109,7 @@ body{
 }
 .hero-grid{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-columns:repeat(4,minmax(0,1fr)); /* force 4 tiles on all devices */
   gap:4px;
   width:100%;
   background:#0f141c;
@@ -100,13 +117,12 @@ body{
 .hero-grid img{
   width:100%;
   aspect-ratio:1 / 1;   /* square tiles */
-  object-fit:cover;     /* crop edges if not square */
+  object-fit:cover;
   display:block;
 }
-
-/* Make the tiles a bit tighter on very small phones */
+/* Make gaps a bit tighter on very small phones */
 @media (max-width:400px){
-  .hero-grid{gap:2px;}
+  .hero-grid{ gap:2px; }
 }
 
 /* Main container */
@@ -133,7 +149,7 @@ body{
   margin:1rem 0 .6rem;
 }
 .segment{
-  min-width:0;
+  min-width:0; /* allow shrink on small screens */
   text-align:center;
   background:#101623;
   border:1px solid #1e2736;
@@ -151,10 +167,9 @@ body{
   letter-spacing:.05em;
   font-size:clamp(.72rem,2.6vw,.9rem);
 }
-
 /* Ultra-narrow phones: 2x2 so nothing overflows */
 @media (max-width:360px){
-  .timer{grid-template-columns:repeat(2,1fr);}
+  .timer{ grid-template-columns:repeat(2,1fr); }
 }
 
 /* Quip + details */
@@ -170,7 +185,7 @@ body{
 }
 
 /* Year picker (Dom only) */
-#yearPicker[hidden]{display:none !important;}  /* safety for UA quirks */
+#yearPicker[hidden]{ display:none !important; }  /* safety for UA quirks */
 .year-picker{
   display:flex;
   align-items:center;
@@ -223,78 +238,83 @@ body{
 }
 
 /* Optional hover on desktop */
-#ggBanner:hover{text-decoration:underline;}
+#ggBanner:hover{ text-decoration:underline; }
 
 /* Slightly smaller GG on very narrow screens */
 @media (max-width:420px){
-  #ggBanner{font-size:clamp(60px,24vw,120px);}
+  #ggBanner{ font-size:clamp(60px,24vw,120px); }
 }
 
 /* Small touch tweaks */
 @media (max-width:520px){
-  .menu-btn{padding:.35rem .6rem;}
-  .container{padding:0 .75rem;}
+  .menu-btn{ padding:.35rem .6rem; }
+  .container{ padding:0 .75rem; }
 }
 
-/* === Complaint Counter card (Cam only) === */
-
+/* === Complaint Counter card (Cam page) === */
 .complaint-card{
-  max-width:1000px;
-  margin:1.5rem auto 1.5rem;
-  padding:1rem 1.25rem 1.25rem;
-  border-radius:12px;
   border:1px solid #263041;
+  border-radius:16px;
+  padding:1.2rem 1.4rem;
+  margin:1rem 0 1.5rem;
   background:#101623;
-  box-shadow:0 4px 16px rgba(0,0,0,.35);
+  box-shadow:0 8px 18px rgba(0,0,0,.35);
 }
 
-/* Title in a cursive/calligraphy style, centered */
+/* Title in fancy script at the top, centered */
 .complaint-title{
-  margin:0 0 .75rem;
+  font-family:"Playfair Display", "Times New Roman", serif;
+  font-style:italic;
+  font-size:1.6rem;
   text-align:center;
-  font-size:1.4rem;
-  font-family:"Brush Script MT","Lucida Handwriting",cursive;
+  margin:0 0 .75rem;
 }
 
-/* Body row with text + + button */
+/* Body: sentence + button centered in the card */
 .complaint-body{
   display:flex;
+  flex-direction:column;          /* stack on phones */
   align-items:center;
-  justify-content:space-between;
+  justify-content:center;
   gap:.75rem;
-  font-size:1rem;
+  text-align:center;
+  font-size:1.1rem;
 }
 
-#complaintText{
-  flex:1;
+/* On wider screens, put text and button on one row */
+@media (min-width:640px){
+  .complaint-body{
+    flex-direction:row;
+  }
 }
 
-#complaintCount{
-  font-weight:700;
-}
+/* The numeric value inside the sentence is bold already via <strong> in HTML */
 
-/* + button */
+/* Plus button */
 #complaintIncrement{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:52px;
+  height:52px;
   border-radius:999px;
-  border:1px solid var(--accent);
-  background:#182233;
-  color:var(--ink);
-  font-size:1.3rem;
-  font-weight:700;
-  padding:.35rem .85rem;
+  border:2px solid #4da3ff;
+  background:transparent;
+  color:#f2f5f7;
+  font-size:1.6rem;
   cursor:pointer;
+  transition:background .15s ease, transform .1s ease, box-shadow .15s ease;
 }
 #complaintIncrement:hover{
-  background:#243149;
+  background:#1a3b63;
+  transform:translateY(-1px);
+  box-shadow:0 4px 10px rgba(0,0,0,.4);
 }
-
-/* On smaller screens, stack the line and button a bit nicer */
-@media (max-width:520px){
-  .complaint-body{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-  #complaintIncrement{
-    align-self:flex-end;
-  }
+#complaintIncrement:active{
+  transform:translateY(0);
+  box-shadow:none;
+}
+#complaintIncrement:focus-visible{
+  outline:2px solid #ffffff;
+  outline-offset:2px;
 }
