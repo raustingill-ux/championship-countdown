@@ -1,6 +1,7 @@
 (function () {
-  // ---------- Feature flag (1 = show game link, 0 = hide) ----------
-  const SHOW_GAME = 0; // <-- flip this to 0 to hide the game from the menu
+  // ---------- Feature flags ----------
+  // 0 = hide game from menu, 1 = show "Cam Crush (beta)" link
+  const GAME_LINK_ENABLED = 0;
 
   // ---------- Utilities ----------
   const qs = (sel, el = document) => el.querySelector(sel);
@@ -30,11 +31,15 @@
     const pageTitleText = person.title
       ? person.title
       : `Countdown to ${person.name}’s First Fantasy Championship`;
+
     document.title = pageTitleText;
     qs("#personHeading").textContent = pageTitleText;
 
     // League label at top-right:
-    qs("#pageTitle").textContent = person.multiYear ? "FCL" : "Beast League";
+    const pageTitleEl = qs("#pageTitle");
+    if (pageTitleEl) {
+      pageTitleEl.textContent = person.multiYear ? "FCL" : "Beast League";
+    }
   }
 
   function setHeaderImages(person) {
@@ -44,19 +49,28 @@
       "assets/headers/default.png",
       "assets/headers/default.png",
     ];
-    const imgs = (person.headerImages && person.headerImages.length)
-      ? person.headerImages
-      : defaults;
-    const list = [qs("#headerImg1"), qs("#headerImg2"), qs("#headerImg3"), qs("#headerImg4")];
+    const imgs =
+      person.headerImages && person.headerImages.length
+        ? person.headerImages
+        : defaults;
+    const list = [
+      qs("#headerImg1"),
+      qs("#headerImg2"),
+      qs("#headerImg3"),
+      qs("#headerImg4"),
+    ];
     for (let i = 0; i < list.length; i++) {
+      const imgEl = list[i];
+      if (!imgEl) continue;
       const src = imgs[i] || defaults[i];
-      list[i].src = src;
-      list[i].alt = `${person.name} header image ${i + 1}`;
+      imgEl.src = src;
+      imgEl.alt = `${person.name} header image ${i + 1}`;
     }
   }
 
   function buildMenu(current) {
     const ul = qs("#peopleList");
+    if (!ul) return;
     ul.innerHTML = "";
 
     // People links
@@ -71,19 +85,27 @@
       ul.appendChild(li);
     }
 
-    // Optional: game link (only when SHOW_GAME is truthy)
-    if (SHOW_GAME) {
+    // Optional Cam Crush link (behind feature flag)
+    if (GAME_LINK_ENABLED === 1) {
+      // Divider
       const hr = document.createElement("li");
       hr.style.margin = ".5rem 0";
       hr.style.borderTop = "1px solid #263041";
       ul.appendChild(hr);
 
+      // Game link
       const gameLi = document.createElement("li");
       const gameA = document.createElement("a");
       gameA.href = "cam-crush.html"; // ensure this file exists at site root
       gameA.textContent = "Cam Crush (beta)";
+
       // Highlight as current when you're on the game page
-      if (location.pathname.endsWith("/cam-crush.html") || location.pathname === "/cam-crush.html") {
+      const path = window.location.pathname || "";
+      if (
+        path.endsWith("/cam-crush.html") ||
+        path === "/cam-crush.html" ||
+        path.endsWith("/cam-crush")
+      ) {
         gameA.setAttribute("aria-current", "page");
       }
       gameLi.appendChild(gameA);
@@ -97,6 +119,7 @@
   const backdrop = qs("#backdrop");
 
   function openDrawer() {
+    if (!drawer || !menuBtn || !backdrop) return;
     drawer.setAttribute("aria-hidden", "false");
     menuBtn.setAttribute("aria-expanded", "true");
     backdrop.hidden = false;
@@ -104,26 +127,32 @@
     if (firstLink) firstLink.focus();
   }
   function closeDrawer() {
+    if (!drawer || !menuBtn || !backdrop) return;
     drawer.setAttribute("aria-hidden", "true");
     menuBtn.setAttribute("aria-expanded", "false");
     backdrop.hidden = true;
     menuBtn.focus();
   }
-  menuBtn.addEventListener("click", () => {
-    const isOpen = drawer.getAttribute("aria-hidden") === "false";
-    isOpen ? closeDrawer() : openDrawer();
-  });
-  backdrop.addEventListener("click", closeDrawer);
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && drawer.getAttribute("aria-hidden") === "false") closeDrawer();
-  });
+
+  if (menuBtn && drawer && backdrop) {
+    menuBtn.addEventListener("click", () => {
+      const isOpen = drawer.getAttribute("aria-hidden") === "false";
+      isOpen ? closeDrawer() : openDrawer();
+    });
+    backdrop.addEventListener("click", closeDrawer);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.getAttribute("aria-hidden") === "false") {
+        closeDrawer();
+      }
+    });
+  }
 
   // ---------- Countdown helpers ----------
   const timerEl = qs("#timer");
-  const dEl = qs("#d"),
-        hEl = qs("#h"),
-        mEl = qs("#m"),
-        sEl = qs("#s");
+  const dEl = qs("#d");
+  const hEl = qs("#h");
+  const mEl = qs("#m");
+  const sEl = qs("#s");
   const deadlineText = qs("#deadlineText");
   const quipEl = qs("#quip");
   const yearPicker = qs("#yearPicker");
@@ -136,7 +165,10 @@
       tickHandle = null;
     }
   }
+
   function startCountdown(targetIso) {
+    if (!timerEl || !dEl || !hEl || !mEl || !sEl || !deadlineText) return;
+
     clearTicker();
     const target = new Date(targetIso);
     deadlineText.textContent = fmtCT(targetIso);
@@ -151,14 +183,13 @@
       const minutes = Math.floor((totalSeconds % 3600) / 60);
       const seconds = totalSeconds % 60;
 
-      dEl.textContent = days;
+      dEl.textContent = String(days);
       hEl.textContent = String(hours).padStart(2, "0");
       mEl.textContent = String(minutes).padStart(2, "0");
       sEl.textContent = String(seconds).padStart(2, "0");
 
       if (totalSeconds <= 0) {
-        timerEl.outerHTML =
-          `<p class="final">Season over. Rings won by ${person.name}: 0.</p>`;
+        timerEl.outerHTML = `<p class="final">Season over. Rings won by ${person.name}: 0.</p>`;
         const dt = qs("#deadlineText");
         if (dt && dt.parentElement) dt.parentElement.style.display = "none";
         clearTicker();
@@ -169,6 +200,54 @@
     renderCountdown();
   }
 
+  // ---------- Complaint Counter (Cam-only, localStorage-persisted) ----------
+  function initComplaintCounter(person) {
+    const card = qs("#complaintCard");
+    const countEl = qs("#complaintCount");
+    const btn = qs("#complaintIncrement");
+
+    if (!card || !countEl || !btn) return;
+
+    // Only show this on Cam's page
+    if (person.slug !== "cam") {
+      card.hidden = true;
+      card.style.display = "none";
+      return;
+    }
+
+    card.hidden = false;
+    card.style.display = "";
+
+    const STORAGE_KEY = "camComplaintCount";
+    let count = 0;
+
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (stored !== null) {
+        const n = parseInt(stored, 10);
+        if (!Number.isNaN(n) && n >= 0) count = n;
+      }
+    } catch (err) {
+      // localStorage might be disabled; fail soft.
+    }
+
+    function render() {
+      countEl.textContent = String(count);
+    }
+
+    btn.addEventListener("click", () => {
+      count += 1;
+      render();
+      try {
+        window.localStorage.setItem(STORAGE_KEY, String(count));
+      } catch (err) {
+        // Ignore storage errors
+      }
+    });
+
+    render();
+  }
+
   // ---------- Render ----------
   const person = getPersonFromURL();
   setTitleAndLeague(person);
@@ -176,35 +255,46 @@
   buildMenu(person);
 
   // Quip text (per-person override, fallback to global QUIPS)
-  const pool = (person.quips && person.quips.length) ? person.quips : (QUIPS || []);
-  quipEl.textContent = pool.length ? pool[Math.floor(Math.random() * pool.length)] : "";
+  const pool =
+    person.quips && person.quips.length ? person.quips : (QUIPS || []);
+  if (quipEl) {
+    quipEl.textContent = pool.length
+      ? pool[Math.floor(Math.random() * pool.length)]
+      : "";
+  }
+
+  // Complaint Counter (Cam only)
+  initComplaintCounter(person);
 
   if (person.multiYear) {
     // Dom (multi-year): show picker and DEFAULT to 2025 immediately
-    yearPicker.hidden = false;
-    yearPicker.style.display = ""; // show for Dom
+    if (yearPicker) {
+      yearPicker.hidden = false;
+      yearPicker.style.display = ""; // show for Dom
+    }
 
-    // Fill options 2025..2035 (or whatever is in person.years)
-    yearSelect.innerHTML = "";
-    (person.years || []).forEach((yr) => {
-      const opt = document.createElement("option");
-      opt.value = String(yr);
-      opt.textContent = String(yr);
-      yearSelect.appendChild(opt);
-    });
+    if (yearSelect) {
+      yearSelect.innerHTML = "";
+      (person.years || []).forEach((yr) => {
+        const opt = document.createElement("option");
+        opt.value = String(yr);
+        opt.textContent = String(yr);
+        yearSelect.appendChild(opt);
+      });
 
-    // Start selected year's countdown
-    yearSelect.addEventListener("change", () => {
-      const yr = Number(yearSelect.value);
-      const iso = (typeof domIsoForYear === "function") ? domIsoForYear(yr) : "";
-      if (iso) startCountdown(iso);
-    });
+      yearSelect.addEventListener("change", () => {
+        const yr = Number(yearSelect.value);
+        const iso =
+          typeof domIsoForYear === "function" ? domIsoForYear(yr) : "";
+        if (iso) startCountdown(iso);
+      });
 
-    // Default to 2025
-    const defaultYear = 2025;
-    if ((person.years || []).includes(defaultYear)) {
-      yearSelect.value = String(defaultYear);
-      yearSelect.dispatchEvent(new Event("change"));
+      // Default to 2025
+      const defaultYear = 2025;
+      if ((person.years || []).includes(defaultYear)) {
+        yearSelect.value = String(defaultYear);
+        yearSelect.dispatchEvent(new Event("change"));
+      }
     }
   } else {
     // Matt & Cam: hide the year selector completely and run their timer
