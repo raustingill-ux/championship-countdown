@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Championship Countdown</title>
+  <title>Countdown to a First Fantasy Championship</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="assets/favicon.ico">
   <meta name="description" content="Pick a name and start the jinx.">
-  <meta property="og:title" content="Championship Countdown">
+  <meta property="og:title" content="Countdown to a First Fantasy Championship">
   <meta property="og:description" content="Pick a name and start the jinx.">
   <meta property="og:image" content="assets/og-image.png">
   <meta property="og:type" content="website">
@@ -16,14 +16,24 @@
   <a class="skip" href="#main">Skip to content</a>
 
   <header class="site-header">
-    <button id="menuBtn" class="menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="menuDrawer">☰ Menu</button>
+    <button
+      id="menuBtn"
+      class="menu-btn"
+      aria-haspopup="true"
+      aria-expanded="false"
+      aria-controls="menuDrawer"
+    >
+      ☰ Menu
+    </button>
 
     <!-- Centered GG banner (YouTube link) -->
-    <a id="ggBanner"
-       href="https://www.youtube.com/watch?v=klfT41uZniI&list=RDklfT41uZniI&start_radio=1"
-       target="_blank"
-       rel="noopener noreferrer"
-       aria-label="Open GG video on YouTube">
+    <a
+      id="ggBanner"
+      href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Open GG video on YouTube"
+    >
       GG
     </a>
 
@@ -33,7 +43,7 @@
   <!-- Drawer menu -->
   <aside id="menuDrawer" class="drawer" aria-hidden="true">
     <nav aria-label="People">
-      <h2>Pick a champion</h2>
+      <h2>Pick a championtest</h2>
       <ul id="peopleList"></ul>
     </nav>
   </aside>
@@ -66,10 +76,31 @@
       <div class="segment"><span id="s">0</span><small>Seconds</small></div>
     </div>
 
-    <p id="quip" class="quip"></p>
-    <p class="details">Season ends <time id="deadlineText"></time> (Central Time).</p>
+    <!-- Complaint Counter (Cam only; controlled via script.js) -->
+    <section id="complaintCard" class="complaint-card" hidden>
+      <h3 class="complaint-title">Complaint Counter</h3>
+      <div class="complaint-body">
+        <span id="complaintText">
+          Cam has complained <span id="complaintCount">0</span> times.
+        </span>
+        <button
+          id="complaintIncrement"
+          type="button"
+          aria-label="Add a complaint for Cam"
+        >
+          +
+        </button>
+      </div>
+    </section>
 
-    <noscript><p><strong>This page needs JavaScript</strong> to update the countdown.</p></noscript>
+    <p id="quip" class="quip"></p>
+    <p class="details">
+      Season ends <time id="deadlineText"></time> (Central Time).
+    </p>
+
+    <noscript>
+      <p><strong>This page needs JavaScript</strong> to update the countdown.</p>
+    </noscript>
   </main>
 
   <footer class="site-footer">
