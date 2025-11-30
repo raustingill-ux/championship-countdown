@@ -11,6 +11,21 @@
   <meta property="og:image" content="assets/og-image.png">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- Redirect bare / to Cam vs Matt page -->
+  <script>
+    (function () {
+      try {
+        const url = new URL(window.location.href);
+        if (!url.searchParams.get("p")) {
+          url.searchParams.set("p", "cam");
+          window.location.replace(url.toString());
+        }
+      } catch {
+        // ignore
+      }
+    })();
+  </script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -49,17 +64,17 @@
   </aside>
   <div class="backdrop" id="backdrop" hidden></div>
 
-  <!-- Header image area: 4 slots -->
-  <div class="hero">
-    <div class="hero-grid">
-      <img id="headerImg1" alt="" />
-      <img id="headerImg2" alt="" />
-      <img id="headerImg3" alt="" />
-      <img id="headerImg4" alt="" />
-    </div>
-  </div>
-
   <main id="main" class="container">
+    <!-- Header image area: 4 slots (now inside container) -->
+    <div class="hero">
+      <div class="hero-grid">
+        <img id="headerImg1" alt="" />
+        <img id="headerImg2" alt="" />
+        <img id="headerImg3" alt="" />
+        <img id="headerImg4" alt="" />
+      </div>
+    </div>
+
     <h2 id="personHeading"></h2>
 
     <!-- Dom-only: year picker -->
