@@ -1,7 +1,7 @@
 (function () {
   // ---------- Feature flags ----------
   // 0 = hide game from menu, 1 = show "Cam Crush (beta)" link
-  const GAME_LINK_ENABLED = 1;
+  const GAME_LINK_ENABLED = 0;
 
   // ---------- Utilities ----------
   const qs = (sel, el = document) => el.querySelector(sel);
