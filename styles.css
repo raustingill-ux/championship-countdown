@@ -139,6 +139,33 @@ body{
   margin:.2rem 0 1rem;
 }
 
+/* === 3-column main layout (counters left/right, timer center) === */
+.main-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1fr);
+  gap:1.5rem;
+  align-items:flex-start;
+}
+
+/* Center column stacks its content */
+.center-column{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+}
+
+/* Side cards use full height of their column */
+.side-card{
+  align-self:stretch;
+}
+
+/* Collapse to single column on narrower screens */
+@media (max-width:900px){
+  .main-grid{
+    grid-template-columns:1fr;
+  }
+}
+
 /* Timer – mobile-first grid */
 .timer{
   display:grid;
@@ -251,12 +278,12 @@ body{
   .container{ padding:0 .75rem; }
 }
 
-/* === Complaint Counter card (Cam page) === */
+/* === Complaint / Head Size cards (Cam page) === */
 .complaint-card{
   border:1px solid #263041;
   border-radius:16px;
   padding:1.2rem 1.4rem;
-  margin:1rem 0 1.5rem;
+  margin:0 0 1.5rem;
   background:#101623;
   box-shadow:0 8px 18px rgba(0,0,0,.35);
 }
@@ -285,13 +312,13 @@ body{
 @media (min-width:640px){
   .complaint-body{
     flex-direction:row;
+    justify-content:space-between;
   }
 }
 
-/* The numeric value inside the sentence is bold already via <strong> in HTML */
-
-/* Plus button */
-#complaintIncrement{
+/* Plus buttons: complaint + head-size share styling */
+#complaintIncrement,
+#headSizeIncrement{
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -305,16 +332,19 @@ body{
   cursor:pointer;
   transition:background .15s ease, transform .1s ease, box-shadow .15s ease;
 }
-#complaintIncrement:hover{
+#complaintIncrement:hover,
+#headSizeIncrement:hover{
   background:#1a3b63;
   transform:translateY(-1px);
   box-shadow:0 4px 10px rgba(0,0,0,.4);
 }
-#complaintIncrement:active{
+#complaintIncrement:active,
+#headSizeIncrement:active{
   transform:translateY(0);
   box-shadow:none;
 }
-#complaintIncrement:focus-visible{
+#complaintIncrement:focus-visible,
+#headSizeIncrement:focus-visible{
   outline:2px solid #ffffff;
   outline-offset:2px;
 }
