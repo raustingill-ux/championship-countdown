@@ -62,41 +62,67 @@
   <main id="main" class="container">
     <h2 id="personHeading"></h2>
 
-    <!-- Dom-only: year picker -->
-    <div id="yearPicker" class="year-picker" hidden>
-      <label for="yearSelect"><strong>Select Year:</strong></label>
-      <select id="yearSelect" aria-label="Select countdown year"></select>
-    </div>
+    <!-- Main 3-column layout:
+         Left:  Cam complaint counter
+         Center: year picker + timer + quip/details
+         Right: Matt head-size counter -->
+    <div class="main-grid">
+      <!-- Left side: Complaint Counter (Cam only; controlled via script.js) -->
+      <section id="complaintCard" class="complaint-card side-card" hidden>
+        <h3 class="complaint-title">Complaint Counter</h3>
+        <div class="complaint-body">
+          <span id="complaintText">
+            Cam has complained <span id="complaintCount">0</span> times.
+          </span>
+          <button
+            id="complaintIncrement"
+            type="button"
+            aria-label="Add a complaint for Cam"
+          >
+            +
+          </button>
+        </div>
+      </section>
 
-    <!-- Timer -->
-    <div id="timer" class="timer" role="timer" aria-live="polite" aria-atomic="true">
-      <div class="segment"><span id="d">0</span><small>Days</small></div>
-      <div class="segment"><span id="h">0</span><small>Hours</small></div>
-      <div class="segment"><span id="m">0</span><small>Minutes</small></div>
-      <div class="segment"><span id="s">0</span><small>Seconds</small></div>
-    </div>
+      <!-- Center: Dom year picker + timer + quip/details -->
+      <div class="center-column">
+        <!-- Dom-only: year picker -->
+        <div id="yearPicker" class="year-picker" hidden>
+          <label for="yearSelect"><strong>Select Year:</strong></label>
+          <select id="yearSelect" aria-label="Select countdown year"></select>
+        </div>
 
-    <!-- Complaint Counter (Cam only; wired to Cloudflare KV via script.js) -->
-    <section id="complaintCard" class="complaint-card" hidden>
-      <h3 class="complaint-title">Complaint Counter</h3>
-      <div class="complaint-body">
-        <span id="complaintText">
-          Cam has complained <span id="complaintCount">0</span> times.
-        </span>
-        <button
-          id="complaintIncrement"
-          type="button"
-          aria-label="Add a complaint for Cam"
-        >
-          +
-        </button>
+        <!-- Timer -->
+        <div id="timer" class="timer" role="timer" aria-live="polite" aria-atomic="true">
+          <div class="segment"><span id="d">0</span><small>Days</small></div>
+          <div class="segment"><span id="h">0</span><small>Hours</small></div>
+          <div class="segment"><span id="m">0</span><small>Minutes</small></div>
+          <div class="segment"><span id="s">0</span><small>Seconds</small></div>
+        </div>
+
+        <p id="quip" class="quip"></p>
+        <p class="details">
+          Season ends <time id="deadlineText"></time> (Central Time).
+        </p>
       </div>
-    </section>
 
-    <p id="quip" class="quip"></p>
-    <p class="details">
-      Season ends <time id="deadlineText"></time> (Central Time).
-    </p>
+      <!-- Right side: Head Size counter (Cam-only; controlled via script.js) -->
+      <section id="headSizeCard" class="complaint-card side-card" hidden>
+        <h3 class="complaint-title">Head Size</h3>
+        <div class="complaint-body">
+          <span id="headSizeText">
+            Matt's head is <span id="headSizeCount">0</span> inches in diameter.
+          </span>
+          <button
+            id="headSizeIncrement"
+            type="button"
+            aria-label="Increase Matt's head size"
+          >
+            +
+          </button>
+        </div>
+      </section>
+    </div>
 
     <noscript>
       <p><strong>This page needs JavaScript</strong> to update the countdown.</p>
