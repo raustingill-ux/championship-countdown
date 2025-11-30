@@ -8,7 +8,16 @@
 
   function getPersonFromURL() {
     const url = new URL(window.location.href);
-    const slug = (url.searchParams.get("p") || "").toLowerCase();
+    let slug = (url.searchParams.get("p") || "").toLowerCase();
+
+    // Force homepage / matt to resolve as cam (Cam vs Matt)
+    if (!slug || slug === "matt") {
+      slug = "cam";
+      url.searchParams.set("p", "cam");
+      // Update the URL without a full page reload
+      window.history.replaceState(null, "", url.toString());
+    }
+
     const found = PEOPLE.find((p) => p.slug === slug);
     return found || PEOPLE[0];
   }
@@ -76,7 +85,7 @@
 
     // People links
     for (const p of PEOPLE) {
-      if (p.hideFromMenu) continue; // <--- skip hidden entries like Matt
+      if (p.hideFromMenu) continue; // skip hidden entries like Matt
 
       const a = document.createElement("a");
       a.href = `?p=${encodeURIComponent(p.slug)}`;
@@ -203,7 +212,7 @@
     renderCountdown();
   }
 
-  // ---------- Complaint Counter (Cam-only, localStorage-persisted) ----------
+  // ---------- Complaint Counter (Cam vs Matt only, localStorage) ----------
   function initComplaintCounter(person) {
     const card = qs("#complaintCard");
     const countEl = qs("#complaintCount");
@@ -251,7 +260,7 @@
     render();
   }
 
-  // ---------- Head Size Counter (Matt side, localStorage-persisted) ----------
+  // ---------- Head Size Counter (Matt side, localStorage) ----------
   function initHeadSizeCounter(person) {
     const card = qs("#headSizeCard");
     const countEl = qs("#headSizeValue");
@@ -270,7 +279,7 @@
     card.style.display = "";
 
     const STORAGE_KEY = "mattHeadDiameter";
-    let inches = 0;
+    let inches = 20; // fun non-zero default
 
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
