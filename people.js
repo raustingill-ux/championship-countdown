@@ -44,12 +44,12 @@ const PEOPLE = [
     ],
     targetIso: GLOBAL_SEASON_END_ISO, // Dec 29, 2025 @ 10:00 PM CT
     quips: ["It's finally his year!"],
-    hideFromMenu: true, // <--- keep Matt data, but hide from drawer menu
+    hideFromMenu: true, // keep Matt data but hide from the drawer menu
   },
   {
     slug: "cam",
     // Combined Cam vs Matt page
-    name: "Cam vs Matt", // <--- what shows in the menu
+    name: "Cam vs Matt", // label in the menu
     title: "Countdown to Cam vs Matt Championship Rematch",
     headerImages: [
       // Left side: Cam
