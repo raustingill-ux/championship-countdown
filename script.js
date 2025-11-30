@@ -76,6 +76,8 @@
 
     // People links
     for (const p of PEOPLE) {
+      if (p.hideFromMenu) continue; // <--- skip hidden entries like Matt
+
       const a = document.createElement("a");
       a.href = `?p=${encodeURIComponent(p.slug)}`;
       a.textContent = p.name;
@@ -100,6 +102,7 @@
       gameA.href = "cam-crush.html"; // ensure this file exists at site root
       gameA.textContent = "Cam Crush (beta)";
 
+      // Highlight as current when you're on the game page
       const path = window.location.pathname || "";
       if (
         path.endsWith("/cam-crush.html") ||
@@ -189,8 +192,7 @@
       sEl.textContent = String(seconds).padStart(2, "0");
 
       if (totalSeconds <= 0) {
-        timerEl.outerHTML =
-          `<p class="final">Season over. Rings won by ${person.name}: 0.</p>`;
+        timerEl.outerHTML = `<p class="final">Season over. Rings won by ${person.name}: 0.</p>`;
         const dt = qs("#deadlineText");
         if (dt && dt.parentElement) dt.parentElement.style.display = "none";
         clearTicker();
@@ -209,7 +211,7 @@
 
     if (!card || !countEl || !btn) return;
 
-    // Only show this on Cam's page
+    // Only show this on Cam's (Cam vs Matt) page
     if (person.slug !== "cam") {
       card.hidden = true;
       card.style.display = "none";
@@ -249,15 +251,15 @@
     render();
   }
 
-  // ---------- Head Size Counter (Cam-only, localStorage-persisted) ----------
+  // ---------- Head Size Counter (Matt side, localStorage-persisted) ----------
   function initHeadSizeCounter(person) {
     const card = qs("#headSizeCard");
-    const countEl = qs("#headSizeCount");
+    const countEl = qs("#headSizeValue");
     const btn = qs("#headSizeIncrement");
 
     if (!card || !countEl || !btn) return;
 
-    // Only show this on Cam's page
+    // Only on Cam vs Matt page
     if (person.slug !== "cam") {
       card.hidden = true;
       card.style.display = "none";
@@ -267,30 +269,30 @@
     card.hidden = false;
     card.style.display = "";
 
-    const STORAGE_KEY = "mattHeadDiameterInches";
-    let count = 0;
+    const STORAGE_KEY = "mattHeadDiameter";
+    let inches = 0;
 
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
       if (stored !== null) {
         const n = parseInt(stored, 10);
-        if (!Number.isNaN(n) && n >= 0) count = n;
+        if (!Number.isNaN(n) && n >= 0) inches = n;
       }
     } catch (err) {
-      // localStorage might be disabled; fail soft.
+      // ignore
     }
 
     function render() {
-      countEl.textContent = String(count);
+      countEl.textContent = String(inches);
     }
 
     btn.addEventListener("click", () => {
-      count += 1;
+      inches += 1;
       render();
       try {
-        window.localStorage.setItem(STORAGE_KEY, String(count));
+        window.localStorage.setItem(STORAGE_KEY, String(inches));
       } catch (err) {
-        // Ignore storage errors
+        // ignore
       }
     });
 
@@ -312,7 +314,7 @@
       : "";
   }
 
-  // Counters (Cam only)
+  // Counters
   initComplaintCounter(person);
   initHeadSizeCounter(person);
 
@@ -347,7 +349,7 @@
       }
     }
   } else {
-    // Matt & Cam: hide the year selector completely and run their timer
+    // Cam vs Matt (and any non-multi-year): hide the year selector completely and run their timer
     if (yearPicker) {
       yearPicker.hidden = true;
       yearPicker.style.display = "none";
