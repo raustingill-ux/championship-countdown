@@ -31,19 +31,21 @@ body{
   z-index:9999;
 }
 
-/* Header / Footer shells */
+/* Header / Footer shells – full width with small gutters */
 .site-header,
 .site-footer{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:.8rem 1rem;
-  max-width:1400px;          /* was 1000px */
-  margin:0 auto;
+  padding:.8rem 2rem;
+  width:100%;
+  margin:0;
 }
 .site-footer{
   color:var(--muted);
   font-size:.9rem;
+  justify-content:center !important;
+  text-align:center;
 }
 
 /* Menu button */
@@ -100,19 +102,19 @@ body{
   background:#1b2432;
 }
 
-/* Main container */
+/* Main container – full width, with horizontal padding */
 .container{
-  max-width:1400px;          /* was 1000px */
+  width:100%;
   margin:1.25rem auto 2rem;
-  padding:0 1rem;
+  padding:0 2rem 2rem;
 }
 
-/* Hero area – INSIDE .container so columns align with status grid */
+/* Hero area – full width, matches container gutters */
 .hero{
   width:100%;
   border-bottom:1px solid #1f2733;
   background:#0f141c;
-  padding:0;
+  padding:0 2rem;
 }
 .hero-grid{
   display:grid;
@@ -134,17 +136,17 @@ body{
 /* Heading */
 #personHeading{
   text-align:center;
-  font-size:clamp(1.5rem,2.5vw + 1rem,2.6rem);
-  margin:1rem 0 1rem;
+  font-size:clamp(1.7rem,2.8vw + 1rem,2.8rem);
+  margin:1.4rem 0 1.6rem;
 }
 
-/* === 4-column status grid (counters + timer) === */
+/* === 4-column status grid (Complaint | Timer | Head Size) === */
 .status-grid{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:1rem;
+  grid-template-columns:minmax(0,1.3fr) minmax(0,1.7fr) minmax(0,1.7fr) minmax(0,1.3fr);
+  gap:1.4rem;
   align-items:stretch;
-  margin:0 0 1.75rem;
+  margin:0 0 2.2rem;
 }
 
 /* Complaint under image 1 */
@@ -177,11 +179,11 @@ body{
   }
 }
 
-/* Timer – bigger in the center */
+/* Timer – bigger center presence */
 .timer{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:10px;
+  gap:12px;
   align-items:stretch;
   justify-items:stretch;
 }
@@ -190,19 +192,19 @@ body{
   text-align:center;
   background:#101623;
   border:1px solid #1e2736;
-  border-radius:12px;
-  padding:1rem .75rem;
+  border-radius:14px;
+  padding:1.25rem .9rem;
 }
 .segment span{
   display:block;
   font-weight:700;
-  font-size:clamp(1.6rem,6.5vw,3.1rem);
+  font-size:clamp(1.8rem,6.8vw,3.4rem);
 }
 .segment small{
   display:block;
   color:var(--muted);
-  letter-spacing:.05em;
-  font-size:clamp(.75rem,2.6vw,.95rem);
+  letter-spacing:.06em;
+  font-size:clamp(.78rem,2.6vw,1rem);
 }
 @media (max-width:360px){
   .timer{ grid-template-columns:repeat(2,1fr); }
@@ -237,12 +239,6 @@ body{
   padding:.35rem .6rem;
 }
 
-/* Footer centered horizontally */
-.site-footer{
-  justify-content:center !important;
-  text-align:center;
-}
-
 /* === GG YouTube Link (centered + huge) === */
 .site-header{
   position:relative;
@@ -274,33 +270,39 @@ body{
 }
 @media (max-width:520px){
   .menu-btn{ padding:.35rem .6rem; }
-  .container{ padding:0 .75rem; }
+  .container{ padding:0 1.2rem 2rem; }
+  .hero{ padding:0 1.2rem; }
 }
 
 /* === Shared info card style (Complaint + Head Size) === */
 .info-card{
   border:1px solid #263041;
-  border-radius:16px;
-  padding:1.2rem 1.4rem;
+  border-radius:18px;
+  padding:1.9rem 2rem;             /* taller + wider */
   background:#101623;
-  box-shadow:0 8px 18px rgba(0,0,0,.35);
+  box-shadow:0 10px 22px rgba(0,0,0,.4);
 }
+
+/* Titles */
 .complaint-title,
 .headsize-title{
   font-family:"Playfair Display","Times New Roman",serif;
   font-style:italic;
-  font-size:1.6rem;
+  font-size:1.9rem;
   text-align:center;
-  margin:0 0 .75rem;
+  margin:0 0 1rem;
 }
+
+/* Body */
 .card-body{
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:.75rem;
+  gap:.9rem;
   text-align:center;
-  font-size:1.1rem;
+  font-size:1.15rem;
+  line-height:1.5;
 }
 @media (min-width:640px){
   .card-body{
@@ -318,13 +320,13 @@ body{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  width:52px;
-  height:52px;
+  width:58px;
+  height:58px;
   border-radius:999px;
   border:2px solid #4da3ff;
   background:transparent;
   color:#f2f5f7;
-  font-size:1.6rem;
+  font-size:1.8rem;
   cursor:pointer;
   transition:background .15s ease, transform .1s ease, box-shadow .15s ease;
 }
