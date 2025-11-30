@@ -3,9 +3,6 @@
   // 0 = hide game from menu, 1 = show "Cam Crush (beta)" link
   const GAME_LINK_ENABLED = 0;
 
-  // API endpoint for the global complaint counter (Cloudflare Pages Function)
-  const COMPLAINT_API_URL = "/api/complaint-counter";
-
   // ---------- Utilities ----------
   const qs = (sel, el = document) => el.querySelector(sel);
 
@@ -103,7 +100,6 @@
       gameA.href = "cam-crush.html"; // ensure this file exists at site root
       gameA.textContent = "Cam Crush (beta)";
 
-      // Highlight as current when you're on the game page
       const path = window.location.pathname || "";
       if (
         path.endsWith("/cam-crush.html") ||
@@ -193,7 +189,8 @@
       sEl.textContent = String(seconds).padStart(2, "0");
 
       if (totalSeconds <= 0) {
-        timerEl.outerHTML = `<p class="final">Season over. Rings won by ${person.name}: 0.</p>`;
+        timerEl.outerHTML =
+          `<p class="final">Season over. Rings won by ${person.name}: 0.</p>`;
         const dt = qs("#deadlineText");
         if (dt && dt.parentElement) dt.parentElement.style.display = "none";
         clearTicker();
@@ -204,7 +201,7 @@
     renderCountdown();
   }
 
-  // ---------- Complaint Counter (Cam-only, Cloudflare KV backed) ----------
+  // ---------- Complaint Counter (Cam-only, localStorage-persisted) ----------
   function initComplaintCounter(person) {
     const card = qs("#complaintCard");
     const countEl = qs("#complaintCount");
@@ -222,57 +219,82 @@
     card.hidden = false;
     card.style.display = "";
 
+    const STORAGE_KEY = "camComplaintCount";
     let count = 0;
-    let busy = false;
+
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (stored !== null) {
+        const n = parseInt(stored, 10);
+        if (!Number.isNaN(n) && n >= 0) count = n;
+      }
+    } catch (err) {
+      // localStorage might be disabled; fail soft.
+    }
 
     function render() {
       countEl.textContent = String(count);
     }
 
-    async function loadInitial() {
+    btn.addEventListener("click", () => {
+      count += 1;
+      render();
       try {
-        const res = await fetch(COMPLAINT_API_URL, { method: "GET" });
-        if (!res.ok) throw new Error("Bad response");
-        const data = await res.json();
-        if (typeof data.count === "number" && data.count >= 0) {
-          count = data.count;
-        }
+        window.localStorage.setItem(STORAGE_KEY, String(count));
       } catch (err) {
-        console.error("Failed to load complaint count:", err);
-        // Leave count at 0 if backend fails
-      } finally {
-        render();
+        // Ignore storage errors
       }
+    });
+
+    render();
+  }
+
+  // ---------- Head Size Counter (Cam-only, localStorage-persisted) ----------
+  function initHeadSizeCounter(person) {
+    const card = qs("#headSizeCard");
+    const countEl = qs("#headSizeCount");
+    const btn = qs("#headSizeIncrement");
+
+    if (!card || !countEl || !btn) return;
+
+    // Only show this on Cam's page
+    if (person.slug !== "cam") {
+      card.hidden = true;
+      card.style.display = "none";
+      return;
     }
 
-    async function increment() {
-      if (busy) return;
-      busy = true;
-      btn.disabled = true;
-      try {
-        const res = await fetch(COMPLAINT_API_URL, { method: "POST" });
-        if (!res.ok) throw new Error("Bad response");
-        const data = await res.json();
-        if (typeof data.count === "number" && data.count >= 0) {
-          count = data.count;
-        } else {
-          count += 1; // fallback if response is weird
-        }
-      } catch (err) {
-        console.error("Failed to increment complaint count:", err);
-        // Fallback: local optimistic increment so the button still "does" something
-        count += 1;
-      } finally {
-        render();
-        busy = false;
-        btn.disabled = false;
+    card.hidden = false;
+    card.style.display = "";
+
+    const STORAGE_KEY = "mattHeadDiameterInches";
+    let count = 0;
+
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (stored !== null) {
+        const n = parseInt(stored, 10);
+        if (!Number.isNaN(n) && n >= 0) count = n;
       }
+    } catch (err) {
+      // localStorage might be disabled; fail soft.
     }
 
-    btn.addEventListener("click", increment);
+    function render() {
+      countEl.textContent = String(count);
+    }
 
-    // Load initial value from KV
-    loadInitial();
+    btn.addEventListener("click", () => {
+      count += 1;
+      render();
+      try {
+        window.localStorage.setItem(STORAGE_KEY, String(count));
+      } catch (err) {
+        // Ignore storage errors
+      }
+    });
+
+    render();
   }
 
   // ---------- Render ----------
@@ -290,8 +312,9 @@
       : "";
   }
 
-  // Complaint Counter (Cam only; now global)
+  // Counters (Cam only)
   initComplaintCounter(person);
+  initHeadSizeCounter(person);
 
   if (person.multiYear) {
     // Dom (multi-year): show picker and DEFAULT to 2025 immediately
