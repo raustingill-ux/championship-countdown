@@ -139,41 +139,49 @@ body{
   margin:.2rem 0 1rem;
 }
 
-/* === 3-column main layout (counters left/right, timer center) === */
-.main-grid{
+/* === Status grid: complaint (left), timer (center), head size (right) === */
+.status-grid{
   display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1fr);
-  gap:1.5rem;
-  align-items:flex-start;
-}
-
-/* Center column stacks its content */
-.center-column{
-  display:flex;
-  flex-direction:column;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:1rem;
   align-items:stretch;
+  margin:1.25rem 0 1.5rem;
 }
 
-/* Side cards use full height of their column */
-.side-card{
-  align-self:stretch;
+#complaintCard{
+  grid-column:1 / 2;
 }
 
-/* Collapse to single column on narrower screens */
-@media (max-width:900px){
-  .main-grid{
+.timer-shell{
+  grid-column:2 / 4;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+}
+
+#headSizeCard{
+  grid-column:4 / 5;
+}
+
+/* Stack vertically on smaller screens */
+@media (max-width:760px){
+  .status-grid{
     grid-template-columns:1fr;
+  }
+  #complaintCard,
+  .timer-shell,
+  #headSizeCard{
+    grid-column:1 / 2;
   }
 }
 
-/* Timer – mobile-first grid */
+/* Timer – bigger, centered, sits in the middle column area */
 .timer{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:8px;
+  gap:10px;
   align-items:stretch;
   justify-items:stretch;
-  margin:1rem 0 .6rem;
 }
 .segment{
   min-width:0; /* allow shrink on small screens */
@@ -181,18 +189,18 @@ body{
   background:#101623;
   border:1px solid #1e2736;
   border-radius:12px;
-  padding:.75rem .6rem;
+  padding:1rem .75rem;
 }
 .segment span{
   display:block;
   font-weight:700;
-  font-size:clamp(1.25rem,6vw,2.6rem);
+  font-size:clamp(1.6rem,6.5vw,3.1rem);  /* bigger timer */
 }
 .segment small{
   display:block;
   color:var(--muted);
   letter-spacing:.05em;
-  font-size:clamp(.72rem,2.6vw,.9rem);
+  font-size:clamp(.75rem,2.6vw,.95rem);
 }
 /* Ultra-narrow phones: 2x2 so nothing overflows */
 @media (max-width:360px){
@@ -278,19 +286,19 @@ body{
   .container{ padding:0 .75rem; }
 }
 
-/* === Complaint / Head Size cards (Cam page) === */
-.complaint-card{
+/* === Shared info card style (Complaint + Head Size) === */
+.info-card{
   border:1px solid #263041;
   border-radius:16px;
   padding:1.2rem 1.4rem;
-  margin:0 0 1.5rem;
   background:#101623;
   box-shadow:0 8px 18px rgba(0,0,0,.35);
 }
 
 /* Title in fancy script at the top, centered */
-.complaint-title{
-  font-family:"Playfair Display", "Times New Roman", serif;
+.complaint-title,
+.headsize-title{
+  font-family:"Playfair Display","Times New Roman",serif;
   font-style:italic;
   font-size:1.6rem;
   text-align:center;
@@ -298,7 +306,7 @@ body{
 }
 
 /* Body: sentence + button centered in the card */
-.complaint-body{
+.card-body{
   display:flex;
   flex-direction:column;          /* stack on phones */
   align-items:center;
@@ -310,13 +318,18 @@ body{
 
 /* On wider screens, put text and button on one row */
 @media (min-width:640px){
-  .complaint-body{
+  .card-body{
     flex-direction:row;
-    justify-content:space-between;
   }
 }
 
-/* Plus buttons: complaint + head-size share styling */
+/* Highlighted numbers inside counters */
+.stat-number{
+  font-weight:700;
+  color:var(--accent);
+}
+
+/* Plus buttons */
 #complaintIncrement,
 #headSizeIncrement{
   display:inline-flex;
