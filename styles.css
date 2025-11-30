@@ -38,7 +38,7 @@ body{
   align-items:center;
   justify-content:space-between;
   padding:.8rem 1rem;
-  max-width:1000px;
+  max-width:1400px;          /* was 1000px */
   margin:0 auto;
 }
 .site-footer{
@@ -102,12 +102,12 @@ body{
 
 /* Main container */
 .container{
-  max-width:1000px;
+  max-width:1400px;          /* was 1000px */
   margin:1.25rem auto 2rem;
   padding:0 1rem;
 }
 
-/* Hero area – now INSIDE .container so columns align */
+/* Hero area – INSIDE .container so columns align with status grid */
 .hero{
   width:100%;
   border-bottom:1px solid #1f2733;
