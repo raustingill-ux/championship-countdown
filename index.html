@@ -68,9 +68,12 @@
       <select id="yearSelect" aria-label="Select countdown year"></select>
     </div>
 
-    <!-- Status grid: left = complaint, center = timer, right = head size -->
+    <!-- 4-column status grid:
+         col 1 = Complaint Counter (under image 1)
+         col 2–3 = Timer (under images 2 & 3)
+         col 4 = Head Size (under image 4) -->
     <section class="status-grid">
-      <!-- Complaint Counter (Cam vs Matt only) -->
+      <!-- Complaint Counter -->
       <section id="complaintCard" class="info-card complaint-card" hidden>
         <h3 class="complaint-title">Complaint Counter</h3>
         <div class="card-body complaint-body">
@@ -89,7 +92,7 @@
         </div>
       </section>
 
-      <!-- Center timer -->
+      <!-- Timer (center 2 columns) -->
       <div class="timer-shell">
         <div
           id="timer"
@@ -113,7 +116,7 @@
         </div>
       </div>
 
-      <!-- Head Size (Matt, Cam vs Matt page only) -->
+      <!-- Head Size -->
       <section id="headSizeCard" class="info-card headsize-card" hidden>
         <h3 class="headsize-title">Head Size</h3>
         <div class="card-body headsize-body">
