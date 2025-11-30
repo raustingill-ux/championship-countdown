@@ -8,18 +8,9 @@
 
   function getPersonFromURL() {
     const url = new URL(window.location.href);
-    let slug = (url.searchParams.get("p") || "").toLowerCase();
-
-    // Force homepage / matt to resolve as cam (Cam vs Matt)
-    if (!slug || slug === "matt") {
-      slug = "cam";
-      url.searchParams.set("p", "cam");
-      // Update the URL without a full page reload
-      window.history.replaceState(null, "", url.toString());
-    }
-
+    const slug = (url.searchParams.get("p") || "").toLowerCase();
     const found = PEOPLE.find((p) => p.slug === slug);
-    return found || PEOPLE[0];
+    return found || PEOPLE.find((p) => p.slug === "cam") || PEOPLE[0];
   }
 
   function fmtCT(iso) {
@@ -42,8 +33,8 @@
       : `Countdown to ${person.name}’s First Fantasy Championship`;
 
     document.title = pageTitleText;
-    const heading = qs("#personHeading");
-    if (heading) heading.textContent = pageTitleText;
+    const headingEl = qs("#personHeading");
+    if (headingEl) headingEl.textContent = pageTitleText;
 
     // League label at top-right:
     const pageTitleEl = qs("#pageTitle");
@@ -83,13 +74,13 @@
     if (!ul) return;
     ul.innerHTML = "";
 
-    // People links
-    for (const p of PEOPLE) {
-      if (p.hideFromMenu) continue; // skip hidden entries like Matt
+    // Only show Cam and Dom; hide Matt
+    const visiblePeople = PEOPLE.filter((p) => p.slug !== "matt");
 
+    for (const p of visiblePeople) {
       const a = document.createElement("a");
       a.href = `?p=${encodeURIComponent(p.slug)}`;
-      a.textContent = p.name;
+      a.textContent = p.slug === "cam" ? "Cam vs Matt" : p.name;
       if (p.slug === current.slug) a.setAttribute("aria-current", "page");
 
       const li = document.createElement("li");
@@ -99,19 +90,16 @@
 
     // Optional Cam Crush link (behind feature flag)
     if (GAME_LINK_ENABLED === 1) {
-      // Divider
       const hr = document.createElement("li");
       hr.style.margin = ".5rem 0";
       hr.style.borderTop = "1px solid #263041";
       ul.appendChild(hr);
 
-      // Game link
       const gameLi = document.createElement("li");
       const gameA = document.createElement("a");
-      gameA.href = "cam-crush.html"; // ensure this file exists at site root
+      gameA.href = "cam-crush.html";
       gameA.textContent = "Cam Crush (beta)";
 
-      // Highlight as current when you're on the game page
       const path = window.location.pathname || "";
       if (
         path.endsWith("/cam-crush.html") ||
@@ -188,7 +176,7 @@
 
     function renderCountdown() {
       const now = new Date();
-      let diff = Math.max(0, target.getTime() - now.getTime());
+      const diff = Math.max(0, target.getTime() - now.getTime());
       const totalSeconds = Math.floor(diff / 1000);
       const days = Math.floor(totalSeconds / 86400);
       const hours = Math.floor((totalSeconds % 86400) / 3600);
@@ -201,7 +189,8 @@
       sEl.textContent = String(seconds).padStart(2, "0");
 
       if (totalSeconds <= 0) {
-        timerEl.outerHTML = `<p class="final">Season over. Rings won by ${person.name}: 0.</p>`;
+        timerEl.outerHTML =
+          `<p class="final">Season over. Rings won by ${person.name}: 0.</p>`;
         const dt = qs("#deadlineText");
         if (dt && dt.parentElement) dt.parentElement.style.display = "none";
         clearTicker();
@@ -212,7 +201,7 @@
     renderCountdown();
   }
 
-  // ---------- Complaint Counter (Cam vs Matt only, localStorage) ----------
+  // ---------- Complaint Counter (Cam-only, localStorage) ----------
   function initComplaintCounter(person) {
     const card = qs("#complaintCard");
     const countEl = qs("#complaintCount");
@@ -220,7 +209,6 @@
 
     if (!card || !countEl || !btn) return;
 
-    // Only show this on Cam's (Cam vs Matt) page
     if (person.slug !== "cam") {
       card.hidden = true;
       card.style.display = "none";
@@ -239,8 +227,8 @@
         const n = parseInt(stored, 10);
         if (!Number.isNaN(n) && n >= 0) count = n;
       }
-    } catch (err) {
-      // localStorage might be disabled; fail soft.
+    } catch {
+      // ignore
     }
 
     function render() {
@@ -252,23 +240,22 @@
       render();
       try {
         window.localStorage.setItem(STORAGE_KEY, String(count));
-      } catch (err) {
-        // Ignore storage errors
+      } catch {
+        // ignore
       }
     });
 
     render();
   }
 
-  // ---------- Head Size Counter (Matt side, localStorage) ----------
+  // ---------- Head Size Counter (Cam-only, localStorage) ----------
   function initHeadSizeCounter(person) {
     const card = qs("#headSizeCard");
-    const countEl = qs("#headSizeValue");
+    const valueEl = qs("#headSizeValue");
     const btn = qs("#headSizeIncrement");
 
-    if (!card || !countEl || !btn) return;
+    if (!card || !valueEl || !btn) return;
 
-    // Only on Cam vs Matt page
     if (person.slug !== "cam") {
       card.hidden = true;
       card.style.display = "none";
@@ -278,29 +265,29 @@
     card.hidden = false;
     card.style.display = "";
 
-    const STORAGE_KEY = "mattHeadDiameter";
-    let inches = 20; // fun non-zero default
+    const STORAGE_KEY = "mattHeadSizeInches";
+    let size = 20; // starting diameter
 
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
       if (stored !== null) {
         const n = parseInt(stored, 10);
-        if (!Number.isNaN(n) && n >= 0) inches = n;
+        if (!Number.isNaN(n) && n > 0) size = n;
       }
-    } catch (err) {
+    } catch {
       // ignore
     }
 
     function render() {
-      countEl.textContent = String(inches);
+      valueEl.textContent = String(size);
     }
 
     btn.addEventListener("click", () => {
-      inches += 1;
+      size += 1;
       render();
       try {
-        window.localStorage.setItem(STORAGE_KEY, String(inches));
-      } catch (err) {
+        window.localStorage.setItem(STORAGE_KEY, String(size));
+      } catch {
         // ignore
       }
     });
@@ -323,15 +310,14 @@
       : "";
   }
 
-  // Counters
+  // Counters (Cam only)
   initComplaintCounter(person);
   initHeadSizeCounter(person);
 
   if (person.multiYear) {
-    // Dom (multi-year): show picker and DEFAULT to 2025 immediately
     if (yearPicker) {
       yearPicker.hidden = false;
-      yearPicker.style.display = ""; // show for Dom
+      yearPicker.style.display = "";
     }
 
     if (yearSelect) {
@@ -350,7 +336,6 @@
         if (iso) startCountdown(iso);
       });
 
-      // Default to 2025
       const defaultYear = 2025;
       if ((person.years || []).includes(defaultYear)) {
         yearSelect.value = String(defaultYear);
@@ -358,7 +343,6 @@
       }
     }
   } else {
-    // Cam vs Matt (and any non-multi-year): hide the year selector completely and run their timer
     if (yearPicker) {
       yearPicker.hidden = true;
       yearPicker.style.display = "none";
