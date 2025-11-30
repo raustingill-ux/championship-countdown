@@ -43,7 +43,7 @@
   <!-- Drawer menu -->
   <aside id="menuDrawer" class="drawer" aria-hidden="true">
     <nav aria-label="People">
-      <h2>Pick a championtest</h2>
+      <h2>Pick a champion</h2>
       <ul id="peopleList"></ul>
     </nav>
   </aside>
@@ -62,17 +62,22 @@
   <main id="main" class="container">
     <h2 id="personHeading"></h2>
 
-    <!-- Main 3-column layout:
-         Left:  Cam complaint counter
-         Center: year picker + timer + quip/details
-         Right: Matt head-size counter -->
-    <div class="main-grid">
-      <!-- Left side: Complaint Counter (Cam only; controlled via script.js) -->
-      <section id="complaintCard" class="complaint-card side-card" hidden>
+    <!-- Dom-only: year picker -->
+    <div id="yearPicker" class="year-picker" hidden>
+      <label for="yearSelect"><strong>Select Year:</strong></label>
+      <select id="yearSelect" aria-label="Select countdown year"></select>
+    </div>
+
+    <!-- Status grid: left = complaint, center = timer, right = head size -->
+    <section class="status-grid">
+      <!-- Complaint Counter (Cam vs Matt only) -->
+      <section id="complaintCard" class="info-card complaint-card" hidden>
         <h3 class="complaint-title">Complaint Counter</h3>
-        <div class="complaint-body">
-          <span id="complaintText">
-            Cam has complained <span id="complaintCount">0</span> times.
+        <div class="card-body complaint-body">
+          <span>
+            Cam has complained
+            <span id="complaintCount" class="stat-number">0</span>
+            times.
           </span>
           <button
             id="complaintIncrement"
@@ -84,34 +89,38 @@
         </div>
       </section>
 
-      <!-- Center: Dom year picker + timer + quip/details -->
-      <div class="center-column">
-        <!-- Dom-only: year picker -->
-        <div id="yearPicker" class="year-picker" hidden>
-          <label for="yearSelect"><strong>Select Year:</strong></label>
-          <select id="yearSelect" aria-label="Select countdown year"></select>
+      <!-- Center timer -->
+      <div class="timer-shell">
+        <div
+          id="timer"
+          class="timer"
+          role="timer"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <div class="segment">
+            <span id="d">0</span><small>Days</small>
+          </div>
+          <div class="segment">
+            <span id="h">00</span><small>Hours</small>
+          </div>
+          <div class="segment">
+            <span id="m">00</span><small>Minutes</small>
+          </div>
+          <div class="segment">
+            <span id="s">00</span><small>Seconds</small>
+          </div>
         </div>
-
-        <!-- Timer -->
-        <div id="timer" class="timer" role="timer" aria-live="polite" aria-atomic="true">
-          <div class="segment"><span id="d">0</span><small>Days</small></div>
-          <div class="segment"><span id="h">0</span><small>Hours</small></div>
-          <div class="segment"><span id="m">0</span><small>Minutes</small></div>
-          <div class="segment"><span id="s">0</span><small>Seconds</small></div>
-        </div>
-
-        <p id="quip" class="quip"></p>
-        <p class="details">
-          Season ends <time id="deadlineText"></time> (Central Time).
-        </p>
       </div>
 
-      <!-- Right side: Head Size counter (Cam-only; controlled via script.js) -->
-      <section id="headSizeCard" class="complaint-card side-card" hidden>
-        <h3 class="complaint-title">Head Size</h3>
-        <div class="complaint-body">
-          <span id="headSizeText">
-            Matt's head is <span id="headSizeCount">0</span> inches in diameter.
+      <!-- Head Size (Matt, Cam vs Matt page only) -->
+      <section id="headSizeCard" class="info-card headsize-card" hidden>
+        <h3 class="headsize-title">Head Size</h3>
+        <div class="card-body headsize-body">
+          <span>
+            Matt's head is
+            <span id="headSizeValue" class="stat-number">20</span>
+            inches in diameter.
           </span>
           <button
             id="headSizeIncrement"
@@ -122,7 +131,12 @@
           </button>
         </div>
       </section>
-    </div>
+    </section>
+
+    <p id="quip" class="quip"></p>
+    <p class="details">
+      Season ends <time id="deadlineText"></time> (Central Time).
+    </p>
 
     <noscript>
       <p><strong>This page needs JavaScript</strong> to update the countdown.</p>
