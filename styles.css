@@ -109,7 +109,7 @@ body{
 }
 .hero-grid{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr)); /* force 4 tiles on all devices */
+  grid-template-columns:repeat(4,minmax(0,1fr)); /* always 4 tiles */
   gap:4px;
   width:100%;
   background:#0f141c;
@@ -120,7 +120,6 @@ body{
   object-fit:cover;
   display:block;
 }
-/* Make gaps a bit tighter on very small phones */
 @media (max-width:400px){
   .hero-grid{ gap:2px; }
 }
@@ -139,19 +138,21 @@ body{
   margin:.2rem 0 1rem;
 }
 
-/* === Status grid: complaint (left), timer (center), head size (right) === */
+/* === 4-column status grid (counters + timer) === */
 .status-grid{
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
   gap:1rem;
   align-items:stretch;
-  margin:1.25rem 0 1.5rem;
+  margin:1.25rem 0 1.75rem;
 }
 
+/* Complaint under image 1 */
 #complaintCard{
   grid-column:1 / 2;
 }
 
+/* Timer under images 2 & 3 */
 .timer-shell{
   grid-column:2 / 4;
   display:flex;
@@ -159,12 +160,13 @@ body{
   justify-content:center;
 }
 
+/* Head size under image 4 */
 #headSizeCard{
   grid-column:4 / 5;
 }
 
-/* Stack vertically on smaller screens */
-@media (max-width:760px){
+/* Stack vertically on small screens */
+@media (max-width:860px){
   .status-grid{
     grid-template-columns:1fr;
   }
@@ -175,7 +177,7 @@ body{
   }
 }
 
-/* Timer – bigger, centered, sits in the middle column area */
+/* Timer – bigger in the center */
 .timer{
   display:grid;
   grid-template-columns:repeat(4,1fr);
@@ -184,7 +186,7 @@ body{
   justify-items:stretch;
 }
 .segment{
-  min-width:0; /* allow shrink on small screens */
+  min-width:0;
   text-align:center;
   background:#101623;
   border:1px solid #1e2736;
@@ -194,7 +196,7 @@ body{
 .segment span{
   display:block;
   font-weight:700;
-  font-size:clamp(1.6rem,6.5vw,3.1rem);  /* bigger timer */
+  font-size:clamp(1.6rem,6.5vw,3.1rem);
 }
 .segment small{
   display:block;
@@ -202,7 +204,6 @@ body{
   letter-spacing:.05em;
   font-size:clamp(.75rem,2.6vw,.95rem);
 }
-/* Ultra-narrow phones: 2x2 so nothing overflows */
 @media (max-width:360px){
   .timer{ grid-template-columns:repeat(2,1fr); }
 }
@@ -220,7 +221,7 @@ body{
 }
 
 /* Year picker (Dom only) */
-#yearPicker[hidden]{ display:none !important; }  /* safety for UA quirks */
+#yearPicker[hidden]{ display:none !important; }
 .year-picker{
   display:flex;
   align-items:center;
@@ -245,10 +246,8 @@ body{
 /* === GG YouTube Link (centered + huge) === */
 .site-header{
   position:relative;
-  min-height:clamp(64px,18vw,180px); /* enough room for giant GG */
+  min-height:clamp(64px,18vw,180px);
 }
-
-/* Centered, HUGE red GG that is a real link */
 #ggBanner{
   position:absolute;
   left:50%;
@@ -264,23 +263,15 @@ body{
   text-shadow:0 2px 4px rgba(0,0,0,.45);
   line-height:1;
 }
-
-/* Keep Menu (left) and League label (right) above the big link if edges overlap */
 .menu-btn,
 #pageTitle{
   position:relative;
   z-index:2;
 }
-
-/* Optional hover on desktop */
 #ggBanner:hover{ text-decoration:underline; }
-
-/* Slightly smaller GG on very narrow screens */
 @media (max-width:420px){
   #ggBanner{ font-size:clamp(60px,24vw,120px); }
 }
-
-/* Small touch tweaks */
 @media (max-width:520px){
   .menu-btn{ padding:.35rem .6rem; }
   .container{ padding:0 .75rem; }
@@ -294,8 +285,6 @@ body{
   background:#101623;
   box-shadow:0 8px 18px rgba(0,0,0,.35);
 }
-
-/* Title in fancy script at the top, centered */
 .complaint-title,
 .headsize-title{
   font-family:"Playfair Display","Times New Roman",serif;
@@ -304,26 +293,20 @@ body{
   text-align:center;
   margin:0 0 .75rem;
 }
-
-/* Body: sentence + button centered in the card */
 .card-body{
   display:flex;
-  flex-direction:column;          /* stack on phones */
+  flex-direction:column;
   align-items:center;
   justify-content:center;
   gap:.75rem;
   text-align:center;
   font-size:1.1rem;
 }
-
-/* On wider screens, put text and button on one row */
 @media (min-width:640px){
   .card-body{
     flex-direction:row;
   }
 }
-
-/* Highlighted numbers inside counters */
 .stat-number{
   font-weight:700;
   color:var(--accent);
