@@ -8,12 +8,13 @@
 /* Base & typography */
 *{box-sizing:border-box}
 html,body{height:100%}
-html{ -webkit-text-size-adjust:100%; }  /* iPhone Safari text zoom fix */
+html{ -webkit-text-size-adjust:100%; }
 body{
   margin:0;
   font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
   color:var(--ink);
-  background:radial-gradient(1200px 600px at 10% -10%,#1a2330,#0d0f14 50%);
+  /* Solid background to avoid weird banding */
+  background:#0d0f14;
 }
 
 /* Accessibility skip link */
@@ -109,17 +110,17 @@ body{
   padding:0 2rem 2rem;
 }
 
-/* Hero area – full width, matches container gutters */
+/* Hero area – FULL WIDTH, no side padding so images touch edges */
 .hero{
   width:100%;
   border-bottom:1px solid #1f2733;
   background:#0f141c;
-  padding:0 2rem;
+  padding:0;
 }
 .hero-grid{
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:4px;
+  gap:0;               /* no extra gap at outer edges */
   width:100%;
   background:#0f141c;
 }
@@ -128,9 +129,6 @@ body{
   aspect-ratio:1 / 1;
   object-fit:cover;
   display:block;
-}
-@media (max-width:400px){
-  .hero-grid{ gap:2px; }
 }
 
 /* Heading */
@@ -141,9 +139,10 @@ body{
 }
 
 /* === 4-column status grid (Complaint | Timer | Head Size) === */
+/* 4 equal columns so each column matches one hero image width */
 .status-grid{
   display:grid;
-  grid-template-columns:minmax(0,1.3fr) minmax(0,1.7fr) minmax(0,1.7fr) minmax(0,1.3fr);
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:1.4rem;
   align-items:stretch;
   margin:0 0 2.2rem;
@@ -154,7 +153,7 @@ body{
   grid-column:1 / 2;
 }
 
-/* Timer under images 2 & 3 */
+/* Timer spans under images 2 + 3 (two columns wide) */
 .timer-shell{
   grid-column:2 / 4;
   display:flex;
@@ -179,11 +178,12 @@ body{
   }
 }
 
-/* Timer – bigger center presence */
+/* Timer – bigger, to fill most of the center */
 .timer{
+  width:100%;
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:12px;
+  gap:14px;
   align-items:stretch;
   justify-items:stretch;
 }
@@ -192,19 +192,19 @@ body{
   text-align:center;
   background:#101623;
   border:1px solid #1e2736;
-  border-radius:14px;
-  padding:1.25rem .9rem;
+  border-radius:16px;
+  padding:1.35rem 1rem;
 }
 .segment span{
   display:block;
   font-weight:700;
-  font-size:clamp(1.8rem,6.8vw,3.4rem);
+  font-size:clamp(2rem,6.8vw,3.6rem);
 }
 .segment small{
   display:block;
   color:var(--muted);
   letter-spacing:.06em;
-  font-size:clamp(.78rem,2.6vw,1rem);
+  font-size:clamp(.8rem,2.6vw,1rem);
 }
 @media (max-width:360px){
   .timer{ grid-template-columns:repeat(2,1fr); }
@@ -271,14 +271,13 @@ body{
 @media (max-width:520px){
   .menu-btn{ padding:.35rem .6rem; }
   .container{ padding:0 1.2rem 2rem; }
-  .hero{ padding:0 1.2rem; }
 }
 
 /* === Shared info card style (Complaint + Head Size) === */
 .info-card{
   border:1px solid #263041;
   border-radius:18px;
-  padding:1.9rem 2rem;             /* taller + wider */
+  padding:2.1rem 2.2rem;         /* bigger cards */
   background:#101623;
   box-shadow:0 10px 22px rgba(0,0,0,.4);
 }
@@ -288,9 +287,9 @@ body{
 .headsize-title{
   font-family:"Playfair Display","Times New Roman",serif;
   font-style:italic;
-  font-size:1.9rem;
+  font-size:2rem;
   text-align:center;
-  margin:0 0 1rem;
+  margin:0 0 1.1rem;
 }
 
 /* Body */
@@ -299,9 +298,9 @@ body{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:.9rem;
+  gap:1rem;
   text-align:center;
-  font-size:1.15rem;
+  font-size:1.2rem;
   line-height:1.5;
 }
 @media (min-width:640px){
@@ -320,13 +319,13 @@ body{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  width:58px;
-  height:58px;
+  width:60px;
+  height:60px;
   border-radius:999px;
   border:2px solid #4da3ff;
   background:transparent;
   color:#f2f5f7;
-  font-size:1.8rem;
+  font-size:1.9rem;
   cursor:pointer;
   transition:background .15s ease, transform .1s ease, box-shadow .15s ease;
 }
