@@ -3,6 +3,9 @@
   // 0 = hide game from menu, 1 = show "Cam Crush (beta)" link
   const GAME_LINK_ENABLED = 0;
 
+  // API endpoint for the global complaint counter (Cloudflare Pages Function)
+  const COMPLAINT_API_URL = "/api/complaint-counter";
+
   // ---------- Utilities ----------
   const qs = (sel, el = document) => el.querySelector(sel);
 
@@ -33,7 +36,8 @@
       : `Countdown to ${person.name}’s First Fantasy Championship`;
 
     document.title = pageTitleText;
-    qs("#personHeading").textContent = pageTitleText;
+    const heading = qs("#personHeading");
+    if (heading) heading.textContent = pageTitleText;
 
     // League label at top-right:
     const pageTitleEl = qs("#pageTitle");
@@ -200,7 +204,7 @@
     renderCountdown();
   }
 
-  // ---------- Complaint Counter (Cam-only, localStorage-persisted) ----------
+  // ---------- Complaint Counter (Cam-only, Cloudflare KV backed) ----------
   function initComplaintCounter(person) {
     const card = qs("#complaintCard");
     const countEl = qs("#complaintCount");
@@ -218,34 +222,57 @@
     card.hidden = false;
     card.style.display = "";
 
-    const STORAGE_KEY = "camComplaintCount";
     let count = 0;
-
-    try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored !== null) {
-        const n = parseInt(stored, 10);
-        if (!Number.isNaN(n) && n >= 0) count = n;
-      }
-    } catch (err) {
-      // localStorage might be disabled; fail soft.
-    }
+    let busy = false;
 
     function render() {
       countEl.textContent = String(count);
     }
 
-    btn.addEventListener("click", () => {
-      count += 1;
-      render();
+    async function loadInitial() {
       try {
-        window.localStorage.setItem(STORAGE_KEY, String(count));
+        const res = await fetch(COMPLAINT_API_URL, { method: "GET" });
+        if (!res.ok) throw new Error("Bad response");
+        const data = await res.json();
+        if (typeof data.count === "number" && data.count >= 0) {
+          count = data.count;
+        }
       } catch (err) {
-        // Ignore storage errors
+        console.error("Failed to load complaint count:", err);
+        // Leave count at 0 if backend fails
+      } finally {
+        render();
       }
-    });
+    }
 
-    render();
+    async function increment() {
+      if (busy) return;
+      busy = true;
+      btn.disabled = true;
+      try {
+        const res = await fetch(COMPLAINT_API_URL, { method: "POST" });
+        if (!res.ok) throw new Error("Bad response");
+        const data = await res.json();
+        if (typeof data.count === "number" && data.count >= 0) {
+          count = data.count;
+        } else {
+          count += 1; // fallback if response is weird
+        }
+      } catch (err) {
+        console.error("Failed to increment complaint count:", err);
+        // Fallback: local optimistic increment so the button still "does" something
+        count += 1;
+      } finally {
+        render();
+        busy = false;
+        btn.disabled = false;
+      }
+    }
+
+    btn.addEventListener("click", increment);
+
+    // Load initial value from KV
+    loadInitial();
   }
 
   // ---------- Render ----------
@@ -263,7 +290,7 @@
       : "";
   }
 
-  // Complaint Counter (Cam only)
+  // Complaint Counter (Cam only; now global)
   initComplaintCounter(person);
 
   if (person.multiYear) {
