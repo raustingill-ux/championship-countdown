@@ -100,7 +100,14 @@ body{
   background:#1b2432;
 }
 
-/* Hero area */
+/* Main container */
+.container{
+  max-width:1000px;
+  margin:1.25rem auto 2rem;
+  padding:0 1rem;
+}
+
+/* Hero area – now INSIDE .container so columns align */
 .hero{
   width:100%;
   border-bottom:1px solid #1f2733;
@@ -109,14 +116,14 @@ body{
 }
 .hero-grid{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr)); /* always 4 tiles */
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:4px;
   width:100%;
   background:#0f141c;
 }
 .hero-grid img{
   width:100%;
-  aspect-ratio:1 / 1;   /* square tiles */
+  aspect-ratio:1 / 1;
   object-fit:cover;
   display:block;
 }
@@ -124,18 +131,11 @@ body{
   .hero-grid{ gap:2px; }
 }
 
-/* Main container */
-.container{
-  max-width:1000px;
-  margin:1.25rem auto 2rem;
-  padding:0 1rem;
-}
-
 /* Heading */
 #personHeading{
   text-align:center;
   font-size:clamp(1.5rem,2.5vw + 1rem,2.6rem);
-  margin:.2rem 0 1rem;
+  margin:1rem 0 1rem;
 }
 
 /* === 4-column status grid (counters + timer) === */
@@ -144,7 +144,7 @@ body{
   grid-template-columns:repeat(4,minmax(0,1fr));
   gap:1rem;
   align-items:stretch;
-  margin:1.25rem 0 1.75rem;
+  margin:0 0 1.75rem;
 }
 
 /* Complaint under image 1 */
